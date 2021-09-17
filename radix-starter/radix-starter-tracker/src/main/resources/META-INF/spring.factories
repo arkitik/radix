@@ -1,0 +1,3 @@
+# Dependency injection
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+io.arkitik.radix.starter.tracker.TrackerAutoConfiguration

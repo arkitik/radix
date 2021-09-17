@@ -1,0 +1,15 @@
+arkitik:
+  radix:
+    logger:
+      formatter: json
+      logger-name: io.arkitik.radix.starter.logger.webflux.SampleFluxApp
+      masked-keys:
+        - userUuid
+        - user-agent
+        - accept
+logging:
+  level:
+    io:
+      arkitik: trace
+server:
+  port: 8999
