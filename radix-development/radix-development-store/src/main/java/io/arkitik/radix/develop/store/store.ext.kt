@@ -23,22 +23,23 @@ infix fun <ID : Serializable, I : Identity<ID>> Store<ID, I>.delete(identities: 
 
 infix fun <ID : Serializable, I : Identity<ID>> Store<ID, I>.deleteIds(ids: List<ID>) = ids.deleteAllByIds()
 
-infix fun <ID : Serializable, I : Identity<ID>> Store<ID, I>.updater(
-    identity: I,
-): StoreIdentityUpdater<ID, I> = identity.identityUpdater()
+fun <ID : Serializable, I : Identity<ID>, SIU : StoreIdentityUpdater<ID, I>> storeUpdater(
+    storeIdentityUpdater: SIU,
+    updaterFun: SIU.() -> I,
+): I = storeIdentityUpdater.updaterFun()
 
-infix fun <ID : Serializable, I : Identity<ID>> Store<ID, I>.creator(
-    creatorFun: StoreIdentityCreator<ID, I>.() -> StoreIdentityCreator<ID, I>,
-): StoreIdentityCreator<ID, I> = creatorFun(identityCreator())
 
-infix fun <ID : Serializable, I : Identity<ID>> Store<ID, I>.creatorDo(
-    creatorFun: StoreIdentityCreator<ID, I>.() -> I,
-): I = creatorFun(identityCreator())
+fun <ID : Serializable, I : Identity<ID>, SIU : StoreIdentityUpdater<ID, I>> Store<ID, I>.storeUpdaterWithSave(
+    storeIdentityUpdater: SIU,
+    updaterFun: SIU.() -> I,
+): I = storeUpdater(storeIdentityUpdater, updaterFun).save()
 
-infix fun <ID : Serializable, I : Identity<ID>> Store<ID, I>.saveCreator(
-    creatorFun: StoreIdentityCreator<ID, I>.() -> I,
-): I = this save creatorDo(creatorFun)
+fun <ID : Serializable, I : Identity<ID>, SIC : StoreIdentityCreator<ID, I>> storeCreator(
+    creator: SIC,
+    creatorFun: SIC.() -> I,
+): I = creator.run(creatorFun)
 
-infix fun <ID : Serializable, I : Identity<ID>> Store<ID, I>.saveCreatorFun(
-    creatorFun: StoreIdentityCreator<ID, I>.() -> StoreIdentityCreator<ID, I>,
-): I = creatorFun(identityCreator()).create().save()
+fun <ID : Serializable, I : Identity<ID>, SIC : StoreIdentityCreator<ID, I>> Store<ID, I>.storeCreatorWithSave(
+    creator: SIC,
+    creatorFun: SIC.() -> I,
+): I = storeCreator(creator, creatorFun).save()
