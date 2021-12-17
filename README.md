@@ -1,5 +1,5 @@
 # radix
 
-## TODOS:
+## TODOs:
 
 - **TODO**: Add documents how to use it. 
