@@ -6,7 +6,7 @@ package io.arkitik.radix.develop.shared.error
  * Project *radix* [https://arkitik.io]
  */
 open class SharedException(
-    private val errors: List<ErrorResponse> = ArrayList(),
+    val errors: List<ErrorResponse> = ArrayList(),
 ) : RuntimeException() {
     override val message: String
         get() = errors.toString()
