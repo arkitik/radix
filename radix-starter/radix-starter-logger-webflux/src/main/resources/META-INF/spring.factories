@@ -1,3 +1,0 @@
-# Dependency injection
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-io.arkitik.radix.starter.logger.webflux.NettyRadixLoggerAutoConfiguration
