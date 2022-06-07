@@ -23,6 +23,9 @@
         <module>radix-development-usecase-reactive</module>
         <module>radix-development-operation</module>
         <module>radix-development-operation-ext</module>
+
+        <module>radix-development-store-audit</module>
+        <module>radix-development-identity-audit</module>
     </modules>
 
 
