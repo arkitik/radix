@@ -7,7 +7,7 @@
     <groupId>io.arkitik.radix</groupId>
     <artifactId>radix</artifactId>
     <packaging>pom</packaging>
-    <version>v1.3.0</version>
+    <version>v1.4.0</version>
     <modules>
         <module>radix-port</module>
         <module>radix-adapter</module>
@@ -252,7 +252,7 @@
                 <version>1.6.8</version>
                 <extensions>true</extensions>
                 <configuration>
-                    <stagingProfileId>3ba3f9f735ce00</stagingProfileId>
+                    <stagingProfileId>${sonatype.stagingProfileId}</stagingProfileId>
                     <serverId>s01-ossrh</serverId>
                     <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
                 </configuration>
