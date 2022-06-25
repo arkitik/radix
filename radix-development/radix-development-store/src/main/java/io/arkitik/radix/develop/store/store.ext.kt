@@ -43,3 +43,14 @@ fun <ID : Serializable, I : Identity<ID>, SIC : StoreIdentityCreator<ID, I>> Sto
     creator: SIC,
     creatorFun: SIC.() -> I,
 ): I = storeCreator(creator, creatorFun).save()
+
+
+fun <ID : Serializable, I : Identity<ID>, SIC : StoreIdentityCreator<ID, I>> creator(
+    creator: SIC,
+    creatorCustomizer: SIC.() -> Unit,
+): I = creator.apply(creatorCustomizer).create()
+
+fun <ID : Serializable, I : Identity<ID>, SIC : StoreIdentityCreator<ID, I>> Store<ID, I>.creatorWithSave(
+    creator: SIC,
+    customizer: SIC.() -> Unit,
+): I = creator(creator, customizer).save()

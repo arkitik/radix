@@ -13,13 +13,13 @@ import javax.validation.Validator
  * Created At 29, **Thu Oct, 2020**
  * Project *radix* [https://arkitik.io]
  */
-object DefaultJavaXValidator : JavaXValidator()
+object DefaultJavaXValidator : JavaXValidator<Any>()
 
-open class JavaXValidator internal constructor(
+open class JavaXValidator<T>(
     private val validator: Validator = Validation.buildDefaultValidatorFactory().validator,
     private val errorMapper: ErrorMapper = DefaultErrorMapper,
-) : OperationRole<Any, Unit> {
-    override fun Any.operateRole() {
+) : OperationRole<T, Unit> {
+    final override fun T.operateRole() {
         validator.run {
             validate(this@operateRole)
         }.takeIf {
@@ -41,6 +41,7 @@ object DefaultErrorMapper : ErrorMapper {
             nodes.isNotEmpty() -> {
                 Error(nodes[nodes.size - 1].name, message)
             }
+
             else -> Error(message, propertyPath.toString())
         }
     }

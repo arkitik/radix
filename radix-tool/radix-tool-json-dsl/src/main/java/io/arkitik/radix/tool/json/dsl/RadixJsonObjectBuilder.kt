@@ -9,7 +9,7 @@ import com.google.gson.JsonObject
  * Created At 30, **Fri Oct, 2020**
  * Project *radix* [https://arkitik.io]
  */
-class RadixJsonObjectBuilder internal constructor() {
+class RadixJsonObjectBuilder {
 
     private val jsonObject = JsonObject()
 
@@ -32,5 +32,5 @@ class RadixJsonObjectBuilder internal constructor() {
     /**
      * Return the completed [JsonObject]
      */
-    internal fun build() = jsonObject
+    fun build() = jsonObject
 }

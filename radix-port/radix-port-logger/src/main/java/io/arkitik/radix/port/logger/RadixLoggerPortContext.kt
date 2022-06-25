@@ -2,8 +2,8 @@ package io.arkitik.radix.port.logger
 
 import io.arkitik.radix.port.logger.config.RadixLoggerConfig
 import io.arkitik.radix.port.logger.function.RadixHttpLogWriter
+import io.arkitik.radix.port.logger.function.RadixLoggerCustomizer
 import org.slf4j.LoggerFactory
-import org.slf4j.event.Level
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
@@ -24,13 +24,22 @@ class RadixLoggerPortContext {
     @ConditionalOnMissingBean
     fun logbook(
         radixLoggerConfig: RadixLoggerConfig,
+        customizers: List<RadixLoggerCustomizer>,
     ): Logbook =
         with(Logbook.builder()) {
             correlationId { UUID.randomUUID().toString() }
-            bodyFilter(BodyFilters.replaceFormUrlEncodedProperty(radixLoggerConfig.ignored.fields,
-                radixLoggerConfig.mask))
-            bodyFilter(JsonBodyFilters.replaceJsonStringProperty(radixLoggerConfig.ignored.fields,
-                radixLoggerConfig.mask))
+            bodyFilter(
+                BodyFilters.replaceFormUrlEncodedProperty(
+                    radixLoggerConfig.ignored.fields,
+                    radixLoggerConfig.mask
+                )
+            )
+            bodyFilter(
+                JsonBodyFilters.replaceJsonStringProperty(
+                    radixLoggerConfig.ignored.fields,
+                    radixLoggerConfig.mask
+                )
+            )
             headerFilter(HeaderFilters.replaceHeaders(radixLoggerConfig.ignored.fields, radixLoggerConfig.mask))
             headerFilter(
                 HeaderFilters.replaceCookies(
@@ -59,9 +68,13 @@ class RadixLoggerPortContext {
                         LoggerFactory.getLogger(
                             radixLoggerConfig.loggerName
                         ),
-                        Level.DEBUG
+                        radixLoggerConfig.level
                     )
                 )
             )
+        }.also { builder ->
+            customizers.forEach { customizer ->
+                customizer.customize(builder)
+            }
         }.build()
 }

@@ -5,7 +5,7 @@
     <parent>
         <artifactId>radix-development</artifactId>
         <groupId>io.arkitik.radix</groupId>
-        <version>v1.4.0</version>
+        <version>v1.4.1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -16,6 +16,7 @@
             <groupId>${project.parent.groupId}</groupId>
             <artifactId>radix-development-operation</artifactId>
             <version>${project.parent.version}</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 

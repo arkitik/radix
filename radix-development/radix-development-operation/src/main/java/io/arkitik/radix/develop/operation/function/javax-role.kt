@@ -61,6 +61,7 @@ object DefaultErrorMapper : ErrorMapper {
             nodes.isNotEmpty() -> {
                 Error(nodes[nodes.size - 1].name, message)
             }
+
             else -> Error(message, propertyPath.toString())
         }
     }

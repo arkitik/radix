@@ -59,6 +59,6 @@ fun <T> radixJsonArray(list: List<T>) = list.toJsonArray()
  */
 fun <K, V> HashMap<K, V>.toJsonObject(): JsonObject {
     return radixJsonObject {
-        forEach { (t, u) -> t.toString() to u }
+        forEach { (k, v) -> k.toString() to v }
     }
 }

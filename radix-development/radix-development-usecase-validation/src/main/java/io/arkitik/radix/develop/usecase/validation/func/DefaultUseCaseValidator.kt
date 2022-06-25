@@ -13,7 +13,7 @@ import javax.validation.Validator as JavaXValidator
  * Created At 29, **Thu Oct, 2020**
  * Project *radix* [https://arkitik.io]
  */
-open class DefaultUseCaseValidator internal constructor(
+open class DefaultUseCaseValidator(
     private val validator: JavaXValidator = Validation.buildDefaultValidatorFactory().validator,
     private val errorMapper: ErrorMapper = DefaultErrorMapper(),
 ) : UseCaseValidator {
@@ -49,6 +49,7 @@ open class DefaultUseCaseValidator internal constructor(
                 nodes.isNotEmpty() -> {
                     Error(nodes.last().name, message)
                 }
+
                 else -> Error(message, propertyPath.toString())
             }
         }
