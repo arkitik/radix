@@ -5,15 +5,15 @@ package io.arkitik.radix.develop.operation
  * Created At 21, **Sun February, 2021**
  * Project *radix* [https://arkitik.io]
  */
-interface Operation<RQ, RS> {
+fun interface Operation<RQ, RS> {
     fun RQ.operate(): RS
 }
 
-interface OperationRole<RQ, RS> {
+fun interface OperationRole<RQ, RS> {
     fun RQ.operateRole(): RS
 }
 
-interface Operator<RQ, RS> {
+fun interface Operator<RQ, RS> {
     fun RQ.operate(response: RS)
 }
 
@@ -64,17 +64,11 @@ class OperationBuilder<RQ, RS> : Operation<RQ, RS> {
     }
 
     infix fun mainOperation(operation: RQ.() -> RS) {
-        this.mainOperation = object : Operation<RQ, RS> {
-            override fun RQ.operate() = operation()
-        }
+        this.mainOperation = Operation { operation() }
     }
 
     infix fun after(operator: RQ.(RS) -> Unit) {
-        this.afterOperators.add(object : Operator<RQ, RS> {
-            override fun RQ.operate(response: RS) {
-                operator(response)
-            }
-        })
+        this.afterOperators.add(Operator { response -> operator(response) })
     }
 
     infix fun install(role: OperationRole<RQ, Unit>) {
@@ -82,11 +76,7 @@ class OperationBuilder<RQ, RS> : Operation<RQ, RS> {
     }
 
     infix fun install(role: RQ.() -> Unit) {
-        roles.add(object : OperationRole<RQ, Unit> {
-            override fun RQ.operateRole() {
-                role()
-            }
-        })
+        roles.add(OperationRole { role() })
     }
 
     override fun RQ.operate(): RS {

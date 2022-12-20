@@ -14,7 +14,7 @@ open class SharedException(
     open class Builder internal constructor() {
         private val errors: MutableList<ErrorResponse> = ArrayList()
         fun with(code: String, message: String): Builder {
-            return with(Error(code, message))
+            return with(RadixError(code, message))
         }
 
         fun with(error: ErrorResponse): Builder {

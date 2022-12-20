@@ -1,8 +1,8 @@
 package io.arkitik.radix.develop.operation.ext.function
 
 import io.arkitik.radix.develop.operation.OperationRole
-import io.arkitik.radix.develop.shared.error.Error
 import io.arkitik.radix.develop.shared.error.ErrorResponse
+import io.arkitik.radix.develop.shared.error.RadixError
 import io.arkitik.radix.develop.shared.ext.badRequest
 import javax.validation.ConstraintViolation
 import javax.validation.Validation
@@ -39,10 +39,10 @@ object DefaultErrorMapper : ErrorMapper {
         val nodes = propertyPath.toList()
         return when {
             nodes.isNotEmpty() -> {
-                Error(nodes[nodes.size - 1].name, message)
+                RadixError(nodes[nodes.size - 1].name, message)
             }
 
-            else -> Error(message, propertyPath.toString())
+            else -> RadixError(message, propertyPath.toString())
         }
     }
 }

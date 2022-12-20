@@ -1,7 +1,7 @@
 package io.arkitik.radix.develop.usecase.validation.func
 
-import io.arkitik.radix.develop.shared.error.Error
 import io.arkitik.radix.develop.shared.error.ErrorResponse
+import io.arkitik.radix.develop.shared.error.RadixError
 import io.arkitik.radix.develop.shared.ext.badRequest
 import io.arkitik.radix.develop.usecase.model.UseCaseRequest
 import javax.validation.ConstraintViolation
@@ -47,10 +47,10 @@ open class DefaultUseCaseValidator(
             val nodes = propertyPath.toList()
             return when {
                 nodes.isNotEmpty() -> {
-                    Error(nodes.last().name, message)
+                    RadixError(nodes.last().name, message)
                 }
 
-                else -> Error(message, propertyPath.toString())
+                else -> RadixError(message, propertyPath.toString())
             }
         }
     }
