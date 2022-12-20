@@ -5,7 +5,7 @@
     <parent>
         <artifactId>radix-port</artifactId>
         <groupId>io.arkitik.radix</groupId>
-        <version>v1.4.1</version>
+        <version>v1.5.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -15,6 +15,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.zalando</groupId>
@@ -27,11 +28,13 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
+            <scope>provided</scope>
             <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.module</groupId>
             <artifactId>jackson-module-kotlin</artifactId>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>

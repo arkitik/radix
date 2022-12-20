@@ -9,54 +9,63 @@ import io.arkitik.radix.develop.operation.Operator
  * Created At 07  1:06 AM, **Fri July, 2021**
  * Project *radix* [https://arkitik.io]
  */
+@DslMarker
+internal annotation class OptBuilderDsl
 
+@DslMarker
+internal annotation class OptMainBuilderDsl
+
+@DslMarker
+internal annotation class OptRoleBuilderDsl
+
+@DslMarker
+internal annotation class OptOperatorBuilderDsl
+
+
+@OptBuilderDsl
 fun <RQ, RS> operationBuilder(
     builder: OperationBuilder<RQ, RS>.() -> Unit,
-): Operation<RQ, RS> =
-    OperationBuilder<RQ, RS>()
-        .apply(builder)
-        .build()
+) = OperationBuilder<RQ, RS>()
+    .apply(builder)
+    .build()
 
+@OptBuilderDsl
 class OperationBuilder<RQ, RS> {
     private val roles: MutableList<OperationRole<RQ, Unit>> = mutableListOf()
     private val operators: MutableList<Operator<RQ, RS>> = mutableListOf()
     private lateinit var operation: Operation<RQ, RS>
 
+    @OptMainBuilderDsl
     infix fun mainOperation(operation: Operation<RQ, RS>) {
         this.operation = operation
     }
 
+    @OptMainBuilderDsl
     infix fun mainOperation(operation: RQ.() -> RS) {
-        this.operation = object : Operation<RQ, RS> {
-            override fun RQ.operate() = operation()
-        }
+        mainOperation(Operation { operation() })
     }
 
+    @OptOperatorBuilderDsl
     infix fun after(operator: Operator<RQ, RS>) {
         this.operators.add(operator)
     }
 
+    @OptOperatorBuilderDsl
     infix fun after(operator: RQ.(RS) -> Unit) {
-        this.operators.add(object : Operator<RQ, RS> {
-            override fun RQ.operate(response: RS) {
-                operator(response)
-            }
-        })
+        after(Operator { response -> operator(response) })
     }
 
+    @OptRoleBuilderDsl
     infix fun install(role: OperationRole<RQ, Unit>) {
         roles.add(role)
     }
 
+    @OptRoleBuilderDsl
     infix fun install(role: RQ.() -> Unit) {
-        roles.add(object : OperationRole<RQ, Unit> {
-            override fun RQ.operateRole() {
-                role()
-            }
-        })
+        install(OperationRole { role() })
     }
 
-    fun build() =
+    fun build(): Operation<RQ, RS> =
         DefaultOperation(
             operation = operation,
             roles = roles,
@@ -64,21 +73,21 @@ class OperationBuilder<RQ, RS> {
         )
 }
 
-class DefaultOperation<RQ, RS>(
+internal class DefaultOperation<RQ, RS>(
     private val operation: Operation<RQ, RS>,
     private val roles: MutableList<OperationRole<RQ, Unit>> = mutableListOf(),
     private val operators: MutableList<Operator<RQ, RS>> = mutableListOf(),
 ) : Operation<RQ, RS> {
 
     private fun RQ.before() =
-        roles.forEach { it.run { operateRole() } }
+        roles.forEach { it.operateRole(this) }
 
     private fun RQ.process() =
-        operation.run { operate() }
+        operation.runOperation(this)
 
     private fun RQ.after(response: RS) =
         operators.forEach {
-            it.run { operate(response) }
+            it.runOperator(this, response)
         }
 
     override fun RQ.operate(): RS {

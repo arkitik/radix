@@ -1,2 +1,2 @@
 mvn clean
-mvn package dokka:javadocJar gpg:sign nexus-staging:deploy
+mvn -DperformRelease=true package dokka:javadocJar gpg:sign nexus-staging:deploy

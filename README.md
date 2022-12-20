@@ -77,7 +77,7 @@ Add the below dependency to the project's dependency management:
 <dependency>
     <groupId>io.arkitik.radix</groupId>
     <artifactId>radix-dependencies</artifactId>
-    <version>v1.4.1</version>
+    <version>v1.5.0</version>
     <type>pom</type>
     <scope>import</scope>
 </dependency>

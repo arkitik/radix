@@ -7,6 +7,6 @@ import org.zalando.logbook.LogbookCreator
  * Created At 1:11 AM, 25 , **Sat, June 2022**
  * Project *radix* [arkitik.io](https://arkitik.io)
  */
-interface RadixLoggerCustomizer {
+fun interface RadixLoggerCustomizer {
     fun customize(logbook: LogbookCreator.Builder)
 }
