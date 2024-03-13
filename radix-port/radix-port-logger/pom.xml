@@ -5,7 +5,7 @@
     <parent>
         <artifactId>radix-port</artifactId>
         <groupId>io.arkitik.radix</groupId>
-        <version>v1.5.0</version>
+        <version>v1.6.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 

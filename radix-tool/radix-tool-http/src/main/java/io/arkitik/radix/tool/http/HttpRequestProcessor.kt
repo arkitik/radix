@@ -30,7 +30,7 @@ class HttpRequestProcessor {
 
     private val webClient: WebClient
 
-    fun <T, RS : Any> postBlocking(
+    fun <T : Any, RS : Any> postBlocking(
         request: RequestData<T>,
         responseClass: KClass<RS>,
         subscription: (RS?) -> Unit,
@@ -39,8 +39,8 @@ class HttpRequestProcessor {
         postBlocking(request.body, request.mapping, request.headers, responseClass, subscription, errorHandler)
     }
 
-    fun <T, RS : Any> postBlocking(
-        request: T,
+    fun <T : Any, RS : Any> postBlocking(
+        request: T?,
         mapping: String,
         headers: List<Pair<String, Any?>>,
         responseClass: KClass<RS>,
@@ -56,7 +56,7 @@ class HttpRequestProcessor {
         }
     }
 
-    fun <T, RS : Any> patchBlocking(
+    fun <T : Any, RS : Any> patchBlocking(
         request: RequestData<T>,
         responseClass: KClass<RS>,
         subscription: RS?.() -> Unit,
@@ -65,8 +65,8 @@ class HttpRequestProcessor {
         patchBlocking(request.body, request.mapping, request.headers, responseClass, subscription, errorHandler)
     }
 
-    fun <T, RS : Any> patchBlocking(
-        request: T,
+    fun <T : Any, RS : Any> patchBlocking(
+        request: T?,
         mapping: String,
         headers: List<Pair<String, Any?>>,
         responseClass: KClass<RS>,
@@ -82,7 +82,7 @@ class HttpRequestProcessor {
         }
     }
 
-    fun <T, RS : Any> putBlocking(
+    fun <T : Any?, RS : Any> putBlocking(
         request: RequestData<T>,
         responseClass: KClass<RS>,
         subscription: RS?.() -> Unit,
@@ -91,7 +91,7 @@ class HttpRequestProcessor {
         putBlocking(request.body, request.mapping, request.headers, responseClass, subscription, errorHandler)
     }
 
-    fun <T, RS : Any> putBlocking(
+    fun <T : Any?, RS : Any> putBlocking(
         request: T,
         mapping: String,
         headers: List<Pair<String, Any?>>,
@@ -108,7 +108,7 @@ class HttpRequestProcessor {
         }
     }
 
-    fun <T, RS> post(
+    fun <T : Any?, RS> post(
         request: T,
         mapping: String,
         responseClass: Class<RS>,
@@ -119,13 +119,13 @@ class HttpRequestProcessor {
         headers.forEach {
             requestBodySpec.header(it.first, it.second?.toString())
         }
-        return requestBodySpec
-            .body(BodyInserters.fromValue(request))
-            .retrieve()
+        return requestBodySpec.apply {
+            request?.let(BodyInserters::fromValue)
+        }.retrieve()
             .bodyToFlux(responseClass)
     }
 
-    fun <T, RS> patch(
+    fun <T : Any?, RS> patch(
         request: T,
         mapping: String,
         responseClass: Class<RS>,
@@ -136,13 +136,13 @@ class HttpRequestProcessor {
         headers.forEach {
             requestBodySpec.header(it.first, it.second?.toString())
         }
-        return requestBodySpec
-            .body(BodyInserters.fromValue(request))
-            .retrieve()
+        return requestBodySpec.apply {
+            request?.let(BodyInserters::fromValue)
+        }.retrieve()
             .bodyToFlux(responseClass)
     }
 
-    fun <T, RS> put(
+    fun <T : Any?, RS> put(
         request: T,
         mapping: String,
         responseClass: Class<RS>,
@@ -153,9 +153,9 @@ class HttpRequestProcessor {
         headers.forEach {
             requestBodySpec.header(it.first, it.second?.toString())
         }
-        return requestBodySpec
-            .body(BodyInserters.fromValue(request))
-            .retrieve()
+        return requestBodySpec.apply {
+            request?.let(BodyInserters::fromValue)
+        }.retrieve()
             .bodyToFlux(responseClass)
     }
 

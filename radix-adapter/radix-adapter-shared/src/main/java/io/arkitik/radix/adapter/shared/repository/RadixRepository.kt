@@ -1,8 +1,11 @@
 package io.arkitik.radix.adapter.shared.repository
 
 import io.arkitik.radix.develop.identity.Identity
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
+import org.springframework.data.domain.Sort
+import org.springframework.data.repository.CrudRepository
 import org.springframework.data.repository.NoRepositoryBean
-import org.springframework.data.repository.PagingAndSortingRepository
 import java.io.Serializable
 
 /**
@@ -11,6 +14,8 @@ import java.io.Serializable
  * Project *radix* [https://arkitik.io]
  */
 @NoRepositoryBean
-interface RadixRepository<ID : Serializable, I : Identity<ID>> : PagingAndSortingRepository<I, ID> {
+interface RadixRepository<ID : Serializable, I : Identity<ID>> : CrudRepository<I, ID> {
     fun findByUuid(id: ID): I?
+
+    fun findAll(pageable: Pageable): Page<I>
 }
