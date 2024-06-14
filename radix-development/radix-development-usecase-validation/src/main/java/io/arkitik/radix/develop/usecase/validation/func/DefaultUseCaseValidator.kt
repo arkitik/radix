@@ -4,9 +4,9 @@ import io.arkitik.radix.develop.shared.error.ErrorResponse
 import io.arkitik.radix.develop.shared.error.RadixError
 import io.arkitik.radix.develop.shared.ext.badRequest
 import io.arkitik.radix.develop.usecase.model.UseCaseRequest
-import javax.validation.ConstraintViolation
-import javax.validation.Validation
-import javax.validation.Validator as JavaXValidator
+import jakarta.validation.ConstraintViolation
+import jakarta.validation.Validation
+import jakarta.validation.Validator as JakartaValidator
 
 /**
  * Created By [*Ibrahim AlTamimi *](https://www.linkedin.com/in/iloom/)
@@ -14,7 +14,7 @@ import javax.validation.Validator as JavaXValidator
  * Project *radix* [https://arkitik.io]
  */
 open class DefaultUseCaseValidator(
-    private val validator: JavaXValidator = Validation.buildDefaultValidatorFactory().validator,
+    private val validator: JakartaValidator = Validation.buildDefaultValidatorFactory().validator,
     private val errorMapper: ErrorMapper = DefaultErrorMapper(),
 ) : UseCaseValidator {
     override fun <RQ : UseCaseRequest> RQ.validate() {
@@ -33,7 +33,7 @@ open class DefaultUseCaseValidator(
 
     companion object {
         fun create(
-            validator: JavaXValidator = Validation.buildDefaultValidatorFactory().validator,
+            validator: JakartaValidator = Validation.buildDefaultValidatorFactory().validator,
             errorMapper: ErrorMapper = DefaultErrorMapper(),
         ): UseCaseValidator {
             return DefaultUseCaseValidator(

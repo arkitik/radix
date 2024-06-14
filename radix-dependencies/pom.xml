@@ -95,11 +95,6 @@
             </dependency>
             <dependency>
                 <groupId>${project.parent.groupId}</groupId>
-                <artifactId>radix-development-operation-ext</artifactId>
-                <version>${project.parent.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>${project.parent.groupId}</groupId>
                 <artifactId>radix-adapter-jpa-spec-ext</artifactId>
                 <version>${project.parent.version}</version>
             </dependency>

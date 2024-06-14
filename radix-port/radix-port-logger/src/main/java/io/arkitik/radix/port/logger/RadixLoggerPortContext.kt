@@ -8,7 +8,12 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.zalando.logbook.*
+import org.zalando.logbook.Logbook
+import org.zalando.logbook.core.BodyFilters
+import org.zalando.logbook.core.Conditions
+import org.zalando.logbook.core.DefaultSink
+import org.zalando.logbook.core.HeaderFilters
+import org.zalando.logbook.core.QueryFilters
 import org.zalando.logbook.json.JsonBodyFilters
 import java.util.*
 

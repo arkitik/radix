@@ -1,7 +1,13 @@
 package io.arkitik.radix.develop.shared.ext
 
 import io.arkitik.radix.develop.shared.error.ErrorResponse
-import io.arkitik.radix.develop.shared.exception.*
+import io.arkitik.radix.develop.shared.exception.BadRequestException
+import io.arkitik.radix.develop.shared.exception.ForbiddenException
+import io.arkitik.radix.develop.shared.exception.InternalException
+import io.arkitik.radix.develop.shared.exception.NotAcceptableException
+import io.arkitik.radix.develop.shared.exception.NotAuthorizedException
+import io.arkitik.radix.develop.shared.exception.ResourceNotFoundException
+import io.arkitik.radix.develop.shared.exception.UnprocessableEntityException
 
 /**
  * Created By [*Ibrahim AlTamimi *](https://www.linkedin.com/in/iloom/)
@@ -21,3 +27,5 @@ fun ErrorResponse.internal() = InternalException(this)
 fun ErrorResponse.badRequest() = listOf(this).badRequest()
 
 fun List<ErrorResponse>.badRequest() = BadRequestException(this)
+
+fun ErrorResponse.forbidden() = ForbiddenException(this)

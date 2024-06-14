@@ -1,7 +1,7 @@
 package io.arkitik.radix.adapter.jpa.spec.ext
 
 import org.springframework.data.jpa.domain.Specification
-import javax.persistence.criteria.*
+import jakarta.persistence.criteria.*
 import kotlin.reflect.KProperty1
 
 /**

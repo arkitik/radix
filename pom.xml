@@ -50,8 +50,8 @@
         <dokka.version>1.9.10</dokka.version>
         <kotlin.version>1.9.22</kotlin.version>
 
-        <spring-boot.version>2.7.18</spring-boot.version>
-        <logbook.version>2.16.0</logbook.version>
+        <spring-boot.version>3.3.0</spring-boot.version>
+        <logbook.version>3.9.0</logbook.version>
     </properties>
     <dependencies>
         <dependency>
@@ -87,9 +87,9 @@
                 <scope>import</scope>
             </dependency>
             <dependency>
-                <groupId>javax.validation</groupId>
-                <artifactId>validation-api</artifactId>
-                <version>2.0.1.Final</version>
+                <groupId>jakarta.validation</groupId>
+                <artifactId>jakarta.validation-api</artifactId>
+                <version>3.1.0</version>
             </dependency>
             <dependency>
                 <groupId>org.zalando</groupId>
@@ -145,11 +145,11 @@
                         <plugin>jpa</plugin>
                     </compilerPlugins>
                     <pluginOptions>
-                        <option>all-open:annotation=javax.persistence.Entity</option>
-                        <option>all-open:annotation=javax.persistence.Embeddable</option>
-                        <option>all-open:annotation=javax.persistence.MappedSuperclass</option>
+                        <option>all-open:annotation=jakarta.persistence.Entity</option>
+                        <option>all-open:annotation=jakarta.persistence.Embeddable</option>
+                        <option>all-open:annotation=jakarta.persistence.MappedSuperclass</option>
                     </pluginOptions>
-                    <jvmTarget>1.8</jvmTarget>
+                    <jvmTarget>21</jvmTarget>
                 </configuration>
                 <dependencies>
                     <dependency>
@@ -167,10 +167,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
+                <version>3.13.0</version>
                 <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <source>21</source>
+                    <target>21</target>
                 </configuration>
             </plugin>
         </plugins>
@@ -203,7 +203,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-source-plugin</artifactId>
-                        <version>3.2.1</version>
+                        <version>3.3.0</version>
                         <executions>
                             <execution>
                                 <id>attach-sources</id>
@@ -216,7 +216,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>3.2.0</version>
+                        <version>3.6.2</version>
                         <executions>
                             <execution>
                                 <id>attach-javadocs</id>
@@ -225,6 +225,9 @@
                                 </goals>
                             </execution>
                         </executions>
+                        <configuration>
+                            <javadocExecutable>${java.home}/bin/javadoc</javadocExecutable>
+                        </configuration>
                     </plugin>
                     <plugin>
                         <groupId>org.jetbrains.dokka</groupId>

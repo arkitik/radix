@@ -10,7 +10,5 @@ import io.arkitik.radix.develop.shared.error.ErrorResponse
 class BadRequestException(
     val errors: List<ErrorResponse>,
 ) : RuntimeException() {
-    override fun toString(): String {
-        return errors.toString()
-    }
+    override fun toString() = errors.toString()
 }
