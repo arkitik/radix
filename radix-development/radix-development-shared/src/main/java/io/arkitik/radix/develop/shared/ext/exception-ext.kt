@@ -1,7 +1,6 @@
 package io.arkitik.radix.develop.shared.ext
 
 import io.arkitik.radix.develop.shared.error.ErrorResponse
-import io.arkitik.radix.develop.shared.exception.BadRequestException
 
 /**
  * Created By [*Ibrahim Al-Tamimi *](https://www.linkedin.com/in/iloom/)
@@ -24,8 +23,11 @@ infix fun <R> R?.resourceNotFound(error: ErrorResponse) =
 infix fun <R> R?.internalError(error: ErrorResponse) =
     this ?: throw error.internal()
 
+infix fun <R> R?.forbidden(error: ErrorResponse) =
+    this ?: throw error.forbidden()
+
 infix fun <R> R?.badRequest(error: ErrorResponse) =
-    badRequest(listOf(error))
+    this ?: throw error.badRequest()
 
 infix fun <R> R?.badRequest(errors: List<ErrorResponse>) =
-    this ?: throw BadRequestException(errors)
+    this ?: throw errors.badRequest()

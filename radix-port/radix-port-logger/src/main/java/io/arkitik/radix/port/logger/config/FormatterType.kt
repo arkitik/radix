@@ -1,9 +1,9 @@
 package io.arkitik.radix.port.logger.config
 
-import org.zalando.logbook.CurlHttpLogFormatter
-import org.zalando.logbook.DefaultHttpLogFormatter
 import org.zalando.logbook.HttpLogFormatter
-import org.zalando.logbook.SplunkHttpLogFormatter
+import org.zalando.logbook.core.CurlHttpLogFormatter
+import org.zalando.logbook.core.DefaultHttpLogFormatter
+import org.zalando.logbook.core.SplunkHttpLogFormatter
 import org.zalando.logbook.json.JsonHttpLogFormatter
 
 /**
