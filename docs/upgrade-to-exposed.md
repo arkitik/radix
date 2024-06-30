@@ -1,4 +1,4 @@
-As outcome:
+# Use Kotlin exposed instead of Hibernate
 
 Update radix to **`v2.2.0`** can be found [here](https://github.com/arkitik/radix/releases/tag/v2.1.0) that provides
 default store implementation using Kotlin exposed table instead of Spring Data Repository;
