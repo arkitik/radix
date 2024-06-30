@@ -5,25 +5,20 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>io.arkitik.radix</groupId>
-        <artifactId>radix-development</artifactId>
+        <artifactId>radix-starter</artifactId>
         <version>v2.2.0</version>
     </parent>
 
-    <artifactId>radix-development-exposed-table</artifactId>
+    <artifactId>radix-starter-exposed</artifactId>
     <dependencies>
         <dependency>
-            <groupId>${project.parent.groupId}</groupId>
-            <artifactId>radix-development-identity</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
-        <dependency>
             <groupId>org.jetbrains.exposed</groupId>
-            <artifactId>exposed-core</artifactId>
+            <artifactId>exposed-jdbc</artifactId>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.jetbrains.exposed</groupId>
-            <artifactId>exposed-java-time</artifactId>
+            <artifactId>exposed-spring-boot-starter</artifactId>
             <scope>provided</scope>
         </dependency>
     </dependencies>
