@@ -7,7 +7,7 @@
     <groupId>io.arkitik.radix</groupId>
     <artifactId>radix</artifactId>
     <packaging>pom</packaging>
-    <version>v2.0.0</version>
+    <version>v2.1.0</version>
     <modules>
         <module>radix-port</module>
         <module>radix-adapter</module>
@@ -50,8 +50,9 @@
         <dokka.version>1.9.10</dokka.version>
         <kotlin.version>1.9.22</kotlin.version>
 
-        <spring-boot.version>3.3.0</spring-boot.version>
+        <spring-boot.version>3.3.1</spring-boot.version>
         <logbook.version>3.9.0</logbook.version>
+        <exposed.version>0.52.0</exposed.version>
     </properties>
     <dependencies>
         <dependency>
@@ -72,6 +73,13 @@
     </dependencies>
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>org.jetbrains.exposed</groupId>
+                <artifactId>exposed-bom</artifactId>
+                <version>${exposed.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
             <dependency>
                 <groupId>org.jetbrains.kotlin</groupId>
                 <artifactId>kotlin-bom</artifactId>

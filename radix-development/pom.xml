@@ -5,7 +5,7 @@
     <parent>
         <artifactId>radix</artifactId>
         <groupId>io.arkitik.radix</groupId>
-        <version>v2.0.0</version>
+        <version>v2.1.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -22,6 +22,7 @@
         <module>radix-development-usecase-ext</module>
         <module>radix-development-usecase-reactive</module>
         <module>radix-development-operation</module>
+        <module>radix-development-exposed-table</module>
     </modules>
 
 
