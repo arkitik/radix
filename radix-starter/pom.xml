@@ -5,7 +5,7 @@
     <parent>
         <artifactId>radix</artifactId>
         <groupId>io.arkitik.radix</groupId>
-        <version>v2.1.0</version>
+        <version>v2.2.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -14,5 +14,6 @@
     <modules>
         <module>radix-starter-logger</module>
         <module>radix-starter-logger-webflux</module>
+        <module>radix-starter-exposed</module>
     </modules>
 </project>

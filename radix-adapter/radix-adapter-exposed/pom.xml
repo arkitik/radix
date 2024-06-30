@@ -6,7 +6,7 @@
     <parent>
         <groupId>io.arkitik.radix</groupId>
         <artifactId>radix-adapter</artifactId>
-        <version>v2.1.0</version>
+        <version>v2.2.0</version>
     </parent>
 
     <artifactId>radix-adapter-exposed</artifactId>
