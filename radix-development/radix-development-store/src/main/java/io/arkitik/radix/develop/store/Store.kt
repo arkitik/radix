@@ -11,9 +11,9 @@ import java.io.Serializable
  * Created At 29, **Thu Oct, 2020**
  * Project *radix* [https://arkitik.io]
  */
+typealias TransactionCommand<T> = () -> T
+
 interface Store<ID : Serializable, I : Identity<ID>> {
-    fun I.save(): I
-    fun List<I>.save(): Iterable<I>
     fun ID.delete()
     fun I.delete()
     fun List<ID>.deleteAllByIds()
@@ -21,4 +21,25 @@ interface Store<ID : Serializable, I : Identity<ID>> {
     val storeQuery: StoreQuery<ID, I>
     fun identityCreator(): StoreIdentityCreator<ID, I>
     fun I.identityUpdater(): StoreIdentityUpdater<ID, I>
+
+    fun I.save(): I
+    fun List<I>.save(): Iterable<I>
+
+    fun I.insert(): I
+    fun List<I>.insert(): Iterable<I>
+
+    fun I.update(): I
+    fun List<I>.update(): Iterable<I>
+
+    fun I.saveIgnore()
+    fun List<I>.saveIgnore()
+
+    fun I.insertIgnore()
+    fun List<I>.insertIgnore()
+
+    fun I.updateIgnore()
+    fun List<I>.updateIgnore()
+
+    fun <T> executeInTransaction(transactionCommand: TransactionCommand<T>): T =
+        transactionCommand()
 }

@@ -77,7 +77,7 @@ Add the below dependency to the project's dependency management:
 <dependency>
     <groupId>io.arkitik.radix</groupId>
     <artifactId>radix-dependencies</artifactId>
-    <version>v1.6.0</version>
+    <version>v2.3.0</version>
     <type>pom</type>
     <scope>import</scope>
 </dependency>
@@ -85,7 +85,7 @@ Add the below dependency to the project's dependency management:
 
 ### Prerequisites
 
-* JDK version >= 1.8
+* JDK version >= 17
 
 <!-- USAGE EXAMPLES -->
 

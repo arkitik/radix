@@ -7,7 +7,7 @@
     <groupId>io.arkitik.radix</groupId>
     <artifactId>radix</artifactId>
     <packaging>pom</packaging>
-    <version>v2.2.0</version>
+    <version>v2.3.0</version>
     <modules>
         <module>radix-port</module>
         <module>radix-adapter</module>

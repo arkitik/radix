@@ -10,19 +10,6 @@ import java.io.Serializable
  * Created At 30, **Fri Oct, 2020**
  * Project *radix* [https://arkitik.io]
  */
-
-infix fun <ID : Serializable, I : Identity<ID>> Store<ID, I>.save(identity: I) = identity.save()
-
-infix fun <ID : Serializable, I : Identity<ID>> Store<ID, I>.save(identities: List<I>) = identities.save()
-
-infix fun <ID : Serializable, I : Identity<ID>> Store<ID, I>.delete(identity: I) = identity.delete()
-
-infix fun <ID : Serializable, I : Identity<ID>> Store<ID, I>.deleteId(id: ID) = id.delete()
-
-infix fun <ID : Serializable, I : Identity<ID>> Store<ID, I>.delete(identities: List<I>) = identities.deleteAll()
-
-infix fun <ID : Serializable, I : Identity<ID>> Store<ID, I>.deleteIds(ids: List<ID>) = ids.deleteAllByIds()
-
 fun <ID : Serializable, I : Identity<ID>, SIU : StoreIdentityUpdater<ID, I>> storeUpdater(
     storeIdentityUpdater: SIU,
     updaterFun: SIU.() -> I,
