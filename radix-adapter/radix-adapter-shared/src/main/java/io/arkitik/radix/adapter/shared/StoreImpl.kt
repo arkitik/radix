@@ -15,13 +15,26 @@ import java.io.Serializable
 abstract class StoreImpl<ID : Serializable, I : Identity<ID>, E : I>(
     private val repository: RadixRepository<ID, E>,
 ) : Store<ID, I> {
+    abstract fun I.map(): E
+
+    override val storeQuery: StoreQuery<ID, I> = StoreQueryImpl(repository)
+
     override fun ID.delete() = repository.deleteById(this)
     override fun I.delete() = repository.delete(map())
-    abstract fun I.map(): E
+
+
     override fun I.save(): I = repository.save(this.map())
     override fun List<I>.save(): Iterable<I> = repository.saveAll(map {
         it.map()
     })
+
+    override fun I.insert(): I = save()
+
+    override fun List<I>.insert(): Iterable<I> = save()
+
+    override fun I.update(): I = save()
+
+    override fun List<I>.update(): Iterable<I> = save()
 
     override fun List<I>.deleteAll() =
         with(repository) {
@@ -35,5 +48,27 @@ abstract class StoreImpl<ID : Serializable, I : Identity<ID>, E : I>(
             repository.deleteById(it)
         }
 
-    override val storeQuery: StoreQuery<ID, I> = StoreQueryImpl(repository)
+    override fun I.saveIgnore() {
+        save()
+    }
+
+    override fun List<I>.saveIgnore() {
+        save()
+    }
+
+    override fun I.insertIgnore() {
+        insert()
+    }
+
+    override fun List<I>.insertIgnore() {
+        insert()
+    }
+
+    override fun I.updateIgnore() {
+        update()
+    }
+
+    override fun List<I>.updateIgnore() {
+        update()
+    }
 }

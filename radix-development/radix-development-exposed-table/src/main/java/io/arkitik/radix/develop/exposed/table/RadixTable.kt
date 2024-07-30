@@ -1,18 +1,31 @@
 package io.arkitik.radix.develop.exposed.table
 
+import io.arkitik.radix.develop.identity.Identity
 import org.jetbrains.exposed.sql.Column
+import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.javatime.datetime
+import org.jetbrains.exposed.sql.selectAll
+import java.io.Serializable
 
 /**
  * Created By Ibrahim Al-Tamimi 
  * Created At 12:05 PM, 30/06/2024
  */
-abstract class RadixTable<ID : Comparable<ID>>(name: String = "") : Table(name) {
+abstract class RadixTable<ID, I>(
+    name: String = "",
+) : Table(name) where ID : Serializable, ID : Comparable<ID>, I : Identity<ID> {
     abstract val uuid: Column<ID>
     val creationDate = datetime(name = "creation_date")
 
     override val primaryKey: PrimaryKey
         get() = PrimaryKey(uuid)
+
+    fun findIdentityByUuid(uuid: ID): I? =
+        selectAll().where {
+            this@RadixTable.uuid eq uuid
+        }.singleOrNull()?.let(::mapToIdentity)
+
+    abstract fun mapToIdentity(it: ResultRow): I
 }
 
