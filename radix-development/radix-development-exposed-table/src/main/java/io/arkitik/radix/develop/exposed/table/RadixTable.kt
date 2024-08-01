@@ -4,6 +4,7 @@ import io.arkitik.radix.develop.identity.Identity
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.sql.javatime.CurrentDateTime
 import org.jetbrains.exposed.sql.javatime.datetime
 import org.jetbrains.exposed.sql.selectAll
 import java.io.Serializable
@@ -16,7 +17,8 @@ abstract class RadixTable<ID, I>(
     name: String = "",
 ) : Table(name) where ID : Serializable, ID : Comparable<ID>, I : Identity<ID> {
     abstract val uuid: Column<ID>
-    val creationDate = datetime(name = "creation_date")
+    val creationDate =
+        datetime("creation_date").defaultExpression(CurrentDateTime)
 
     override val primaryKey: PrimaryKey
         get() = PrimaryKey(uuid)
