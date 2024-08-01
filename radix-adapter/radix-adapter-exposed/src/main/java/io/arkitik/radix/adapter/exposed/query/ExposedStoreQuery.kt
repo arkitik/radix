@@ -17,16 +17,16 @@ open class ExposedStoreQuery<ID, I : Identity<ID>, IT : RadixTable<ID, I>>(
     protected val identityTable: IT,
 ) : StoreQuery<ID, I> where ID : Serializable, ID : Comparable<ID> {
 
-    protected fun Query.paged(page: Int, size: Int): PageData<I> =
+    protected open fun Query.paged(page: Int, size: Int): PageData<I> =
         transaction {
             val totalElements = count()
             val items = limit(size, (size * page).toLong())
                 .map(identityTable::mapToIdentity)
-            var totalPages = if (totalElements != 0L) totalElements / size else 0
-            if (totalPages != 0L) {
-                if ((totalPages % size).toInt() != 0) {
-                    totalPages += 1
-                }
+            var totalPages = if (totalElements != 0L)
+                totalElements / size
+            else 0
+            if ((totalElements % size).toInt() != 0) {
+                totalPages += 1
             }
             PageData(
                 content = items,
@@ -53,7 +53,7 @@ open class ExposedStoreQuery<ID, I : Identity<ID>, IT : RadixTable<ID, I>>(
         transaction {
             identityTable.selectAll().where {
                 identityTable.uuid inList uuids
-            }.map { identityTable.mapToIdentity(it) }
+            }.map(identityTable::mapToIdentity)
         }
 
     override fun find(uuid: ID): I? =
