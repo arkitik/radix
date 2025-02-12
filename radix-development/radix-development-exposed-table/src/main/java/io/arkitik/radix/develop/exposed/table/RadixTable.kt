@@ -2,11 +2,12 @@ package io.arkitik.radix.develop.exposed.table
 
 import io.arkitik.radix.develop.identity.Identity
 import org.jetbrains.exposed.sql.Column
+import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.javatime.CurrentDateTime
 import org.jetbrains.exposed.sql.javatime.datetime
-import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.transactions.transaction
 import java.io.Serializable
 
 /**
@@ -23,11 +24,16 @@ abstract class RadixTable<ID, I>(
     override val primaryKey: PrimaryKey
         get() = PrimaryKey(uuid)
 
-    fun findIdentityByUuid(uuid: ID): I? =
-        selectAll().where {
-            this@RadixTable.uuid eq uuid
-        }.singleOrNull()?.let(::mapToIdentity)
+    open fun findIdentityByUuid(uuid: ID, database: Database? = null): I? =
+        transaction(database) {
+            select(columns)
+                .where {
+                    this@RadixTable.uuid eq uuid
+                }.singleOrNull()?.let { resultRow ->
+                    mapToIdentity(resultRow, database)
+                }
+        }
 
-    abstract fun mapToIdentity(it: ResultRow): I
+    abstract fun mapToIdentity(resultRow: ResultRow, database: Database? = null): I
 }
 

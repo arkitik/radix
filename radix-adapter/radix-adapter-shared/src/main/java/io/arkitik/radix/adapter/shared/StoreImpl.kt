@@ -8,7 +8,7 @@ import io.arkitik.radix.develop.store.query.StoreQuery
 import java.io.Serializable
 
 /**
- * Created By [*Ibrahim AlTamimi *](https://www.linkedin.com/in/iloom/)
+ * Created By [*Ibrahim Al-Tamimi *](https://www.linkedin.com/in/iloom/)
  * Created At 30, **Fri Oct, 2020**
  * Project *radix* [https://arkitik.io]
  */
@@ -23,7 +23,18 @@ abstract class StoreImpl<ID : Serializable, I : Identity<ID>, E : I>(
     override fun I.delete() = repository.delete(map())
 
 
+    @Deprecated(
+        "This method will be removed in a future version. Use 'update()' for modifying existing records or 'insert()' for creating new ones.",
+        replaceWith = ReplaceWith("insert() or update()"),
+        level = DeprecationLevel.WARNING
+    )
     override fun I.save(): I = repository.save(this.map())
+
+    @Deprecated(
+        "This method will be removed in a future version. Use 'update()' for modifying existing records or 'insert()' for creating new ones.",
+        replaceWith = ReplaceWith("insert() or update()"),
+        level = DeprecationLevel.WARNING
+    )
     override fun List<I>.save(): Iterable<I> = repository.saveAll(map {
         it.map()
     })
@@ -48,10 +59,20 @@ abstract class StoreImpl<ID : Serializable, I : Identity<ID>, E : I>(
             repository.deleteById(it)
         }
 
+    @Deprecated(
+        "This method will be removed in a future version. Use 'updateIgnore()' for modifying existing records or 'insertIgnore()' for creating new ones.",
+        replaceWith = ReplaceWith("insertIgnore() or updateIgnore()"),
+        level = DeprecationLevel.WARNING
+    )
     override fun I.saveIgnore() {
         save()
     }
 
+    @Deprecated(
+        "This method will be removed in a future version. Use 'updateIgnore()' for modifying existing records or 'insertIgnore()' for creating new ones.",
+        replaceWith = ReplaceWith("insertIgnore() or updateIgnore()"),
+        level = DeprecationLevel.WARNING
+    )
     override fun List<I>.saveIgnore() {
         save()
     }
