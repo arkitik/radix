@@ -4,10 +4,13 @@ import io.arkitik.radix.develop.exposed.table.RadixTable
 import io.arkitik.radix.develop.identity.Identity
 import io.arkitik.radix.develop.store.query.PageData
 import io.arkitik.radix.develop.store.query.StoreQuery
+import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.Query
-import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.transactions.transaction
 import java.io.Serializable
+
+typealias ResultRowMapper<T> = (resultRow: ResultRow) -> T
 
 /**
  * Created By Ibrahim Al-Tamimi 
@@ -15,13 +18,26 @@ import java.io.Serializable
  */
 open class ExposedStoreQuery<ID, I : Identity<ID>, IT : RadixTable<ID, I>>(
     protected val identityTable: IT,
+    protected val database: Database? = null,
 ) : StoreQuery<ID, I> where ID : Serializable, ID : Comparable<ID> {
+    protected open fun Query.paged(
+        page: Int,
+        size: Int,
+    ): PageData<I> = paged(page, size) { rowItem ->
+        identityTable.mapToIdentity(rowItem, database)
+    }
 
-    protected open fun Query.paged(page: Int, size: Int): PageData<I> =
-        transaction {
+    protected open fun <T> Query.paged(
+        page: Int,
+        size: Int,
+        resultRowMapper: ResultRowMapper<T>,
+    ): PageData<I> =
+        transaction(database) {
             val totalElements = count()
-            val items = limit(size, (size * page).toLong())
-                .map(identityTable::mapToIdentity)
+            val items = limit(size).offset((size * page).toLong())
+                .map { rowItem ->
+                    identityTable.mapToIdentity(rowItem, database)
+                }
             var totalPages = if (totalElements != 0L)
                 totalElements / size
             else 0
@@ -39,28 +55,37 @@ open class ExposedStoreQuery<ID, I : Identity<ID>, IT : RadixTable<ID, I>>(
         }
 
     override fun all(): List<I> =
-        transaction {
-            identityTable.selectAll().map(identityTable::mapToIdentity)
+        transaction(database) {
+            identityTable.select(identityTable.columns)
+                .map { rowItem ->
+                    identityTable.mapToIdentity(rowItem, database)
+                }
         }
 
     override fun all(page: Int, size: Int): PageData<I> {
-        return transaction {
-            identityTable.selectAll().paged(page, size)
+        return transaction(database) {
+            identityTable.select(identityTable.columns)
+                .paged(page, size)
         }
     }
 
     override fun allByUuids(uuids: List<ID>): Iterable<I> =
-        transaction {
-            identityTable.selectAll().where {
-                identityTable.uuid inList uuids
-            }.map(identityTable::mapToIdentity)
+        transaction(database) {
+            identityTable.select(identityTable.columns)
+                .where {
+                    identityTable.uuid inList uuids
+                }.map { rowItem ->
+                    identityTable.mapToIdentity(rowItem, database)
+                }
         }
 
     override fun find(uuid: ID): I? =
-        transaction { identityTable.findIdentityByUuid(uuid) }
+        transaction(database) {
+            identityTable.findIdentityByUuid(uuid)
+        }
 
     override fun exist(uuid: ID): Boolean =
-        transaction {
+        transaction(database) {
             !identityTable.select(identityTable.uuid).where {
                 identityTable.uuid eq uuid
             }.empty()

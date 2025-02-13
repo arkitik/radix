@@ -7,7 +7,7 @@
     <groupId>io.arkitik.radix</groupId>
     <artifactId>radix</artifactId>
     <packaging>pom</packaging>
-    <version>v2.3.1</version>
+    <version>v2.4.0</version>
     <modules>
         <module>radix-port</module>
         <module>radix-adapter</module>
@@ -45,14 +45,14 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>1.8</java.version>
+        <java.version>21</java.version>
 
         <dokka.version>1.9.10</dokka.version>
         <kotlin.version>1.9.22</kotlin.version>
 
-        <spring-boot.version>3.3.1</spring-boot.version>
-        <logbook.version>3.9.0</logbook.version>
-        <exposed.version>0.52.0</exposed.version>
+        <spring-boot.version>3.4.2</spring-boot.version>
+        <logbook.version>3.10.0</logbook.version>
+        <exposed.version>0.58.0</exposed.version>
     </properties>
     <dependencies>
         <dependency>
@@ -181,6 +181,57 @@
                     <target>21</target>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.3.0</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.6.2</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <javadocExecutable>${java.home}/bin/javadoc</javadocExecutable>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.jetbrains.dokka</groupId>
+                <artifactId>dokka-maven-plugin</artifactId>
+                <version>${dokka.version}</version>
+                <executions>
+                    <execution>
+                        <phase>pre-site</phase>
+                        <goals>
+                            <goal>dokka</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <dokkaPlugins>
+                        <plugin>
+                            <groupId>org.jetbrains.dokka</groupId>
+                            <artifactId>kotlin-as-java-plugin</artifactId>
+                            <version>${dokka.version}</version>
+                        </plugin>
+                    </dokkaPlugins>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
     <profiles>
@@ -207,57 +258,6 @@
                                 </goals>
                             </execution>
                         </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-source-plugin</artifactId>
-                        <version>3.3.0</version>
-                        <executions>
-                            <execution>
-                                <id>attach-sources</id>
-                                <goals>
-                                    <goal>jar-no-fork</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>3.6.2</version>
-                        <executions>
-                            <execution>
-                                <id>attach-javadocs</id>
-                                <goals>
-                                    <goal>jar</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                        <configuration>
-                            <javadocExecutable>${java.home}/bin/javadoc</javadocExecutable>
-                        </configuration>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.jetbrains.dokka</groupId>
-                        <artifactId>dokka-maven-plugin</artifactId>
-                        <version>${dokka.version}</version>
-                        <executions>
-                            <execution>
-                                <phase>pre-site</phase>
-                                <goals>
-                                    <goal>dokka</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                        <configuration>
-                            <dokkaPlugins>
-                                <plugin>
-                                    <groupId>org.jetbrains.dokka</groupId>
-                                    <artifactId>kotlin-as-java-plugin</artifactId>
-                                    <version>${dokka.version}</version>
-                                </plugin>
-                            </dokkaPlugins>
-                        </configuration>
                     </plugin>
                     <plugin>
                         <groupId>org.sonatype.plugins</groupId>

@@ -6,18 +6,17 @@ import io.arkitik.radix.develop.identity.Identity
 import io.arkitik.radix.develop.store.Store
 import io.arkitik.radix.develop.store.TransactionCommand
 import io.arkitik.radix.develop.store.query.StoreQuery
+import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.inList
 import org.jetbrains.exposed.sql.batchInsert
-import org.jetbrains.exposed.sql.batchReplace
 import org.jetbrains.exposed.sql.batchUpsert
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.insertReturning
 import org.jetbrains.exposed.sql.statements.UpdateBuilder
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
-import org.jetbrains.exposed.sql.updateReturning
+import org.jetbrains.exposed.sql.upsert
 import org.jetbrains.exposed.sql.upsertReturning
 import java.io.Serializable
 
@@ -27,24 +26,37 @@ import java.io.Serializable
  */
 abstract class ExposedStore<ID, I : Identity<ID>, IT : RadixTable<ID, I>>(
     protected val identityTable: IT,
+    protected val database: Database? = null,
 ) : Store<ID, I> where ID : Serializable, ID : Comparable<ID> {
 
-    protected abstract fun <K : Any> UpdateBuilder<K>.createEntity(it: I)
+    protected open val batchDeletion: Boolean = true
+    protected open val batchSize: Int = 1000
+
+    protected abstract fun <K : Any> UpdateBuilder<K>.createEntity(identity: I)
+    protected open fun <K : Any> UpdateBuilder<K>.updateEntity(identity: I) = createEntity(identity)
 
     override val storeQuery: StoreQuery<ID, I>
-        get() = ExposedStoreQuery(identityTable)
+        get() = ExposedStoreQuery(
+            identityTable = identityTable,
+            database = database
+        )
+
+    private fun <T> batchProcess(items: List<T>, processBatch: (chunk: List<T>) -> Unit) =
+        if (batchDeletion)
+            items.chunked(batchSize)
+                .forEach { batch ->
+                    processBatch(batch)
+                }
+        else processBatch(items)
 
     override fun I.delete() {
-        transaction {
-            uuid?.let { uuid ->
-                identityTable.deleteWhere { identityTable.uuid eq uuid }
-            }
-        }
+        this.uuid!!.delete()
     }
 
     override fun ID.delete() {
-        transaction {
-            identityTable.deleteWhere { identityTable.uuid eq this@delete }
+        val recordUuid = this
+        transaction(database) {
+            identityTable.deleteWhere { identityTable.uuid eq recordUuid }
         }
     }
 
@@ -53,78 +65,119 @@ abstract class ExposedStore<ID, I : Identity<ID>, IT : RadixTable<ID, I>>(
     }
 
     override fun List<ID>.deleteAllByIds() {
-        transaction {
-            identityTable.deleteWhere { identityTable.uuid inList this@deleteAllByIds }
+        val recordUuids = this
+        transaction(database) {
+            batchProcess(recordUuids) { chunk ->
+                identityTable.deleteWhere { identityTable.uuid inList chunk }
+            }
         }
     }
 
-    override fun I.save(): I =
-        transaction {
-            identityTable.upsertReturning {
+    @Deprecated(
+        "This method will be removed in a future version. Use 'update()' for modifying existing records or 'insert()' for creating new ones.",
+        replaceWith = ReplaceWith("insert() or update()"),
+        level = DeprecationLevel.WARNING
+    )
+    override fun I.save(): I {
+        return transaction(database) {
+            identityTable.upsert {
                 it.createDefaultEntity(this@save)
-            }.single().let(identityTable::mapToIdentity)
+            }
+            identityTable.findIdentityByUuid(uuid!!)!!
         }
+    }
 
+    @Deprecated(
+        "This method will be removed in a future version. Use 'update()' for modifying existing records or 'insert()' for creating new ones.",
+        replaceWith = ReplaceWith("insert() or update()"),
+        level = DeprecationLevel.WARNING
+    )
     override fun List<I>.save() =
-        transaction {
+        transaction(database) {
             identityTable.batchUpsert(this@save) {
                 this.createDefaultEntity(it)
-            }.map(identityTable::mapToIdentity)
+            }.map { resultRow ->
+                identityTable.mapToIdentity(resultRow, database)
+            }
         }
 
 
     override fun I.insert(): I {
-        val entity = this
-        return transaction {
-            identityTable.insertReturning {
-                it.createDefaultEntity(entity)
-            }.singleOrNull()?.let(identityTable::mapToIdentity) ?: entity
+        val recordToBeInserted = this
+        return transaction(database) {
+            identityTable.insert { rowItem ->
+                rowItem.createDefaultEntity(recordToBeInserted)
+            }
+            recordToBeInserted
         }
     }
 
     override fun List<I>.insert(): Iterable<I> {
         val entities = this
-        return transaction {
-            identityTable.batchInsert(entities) {
-                this.createDefaultEntity(it)
-            }.map(identityTable::mapToIdentity)
+        return transaction(database) {
+            identityTable.batchInsert(entities) { rowItem ->
+                this.createDefaultEntity(rowItem)
+            }.map { resultRow ->
+                identityTable.mapToIdentity(resultRow, database)
+            }
         }
     }
 
     override fun I.update(): I {
         val entity = this
-        return transaction {
-            identityTable.updateReturning {
-                it.createDefaultEntity(entity)
-            }.singleOrNull()?.let(identityTable::mapToIdentity) ?: entity
+        return transaction(database) {
+            identityTable.update(
+                where = {
+                    identityTable.uuid.eq(entity.uuid!!)
+                }
+            ) {
+                it.updateDefaultEntity(entity)
+            }
+            entity
         }
     }
 
     override fun List<I>.update(): Iterable<I> {
-        return transaction {
-            identityTable.batchReplace(this@update) {
-                this.createDefaultEntity(it)
-            }.map(identityTable::mapToIdentity)
+        val entities = this
+        transaction(database) {
+            entities.forEach { entity ->
+                identityTable.update(where = {
+                    identityTable.uuid.eq(entity.uuid!!)
+                }) {
+                    it.updateDefaultEntity(entity)
+                }
+            }
         }
+        return entities
     }
 
     override fun <T> executeInTransaction(transactionCommand: TransactionCommand<T>) =
-        transaction {
+        transaction(database) {
             transactionCommand()
         }
 
+    @Deprecated(
+        "This method will be removed in a future version. Use 'updateIgnore()' for modifying existing records or 'insertIgnore()' for creating new ones.",
+        replaceWith = ReplaceWith("insertIgnore() or updateIgnore()"),
+        level = DeprecationLevel.WARNING
+    )
     override fun I.saveIgnore() {
         val entity = this
-        transaction {
+        transaction(database) {
             identityTable.upsertReturning {
                 it.createDefaultEntity(entity)
             }
         }
     }
 
+    @Deprecated(
+        "This method will be removed in a future version. Use 'updateIgnore()' for modifying existing records or 'insertIgnore()' for creating new ones.",
+        replaceWith = ReplaceWith("insertIgnore() or updateIgnore()"),
+        level = DeprecationLevel.WARNING
+    )
     override fun List<I>.saveIgnore() {
         val entities = this
-        transaction {
+        transaction(database) {
             identityTable.batchUpsert(entities) {
                 this.createDefaultEntity(it)
             }
@@ -133,7 +186,7 @@ abstract class ExposedStore<ID, I : Identity<ID>, IT : RadixTable<ID, I>>(
 
     override fun I.insertIgnore() {
         val entity = this
-        transaction {
+        transaction(database) {
             identityTable.insert {
                 it.createDefaultEntity(entity)
             }
@@ -142,7 +195,7 @@ abstract class ExposedStore<ID, I : Identity<ID>, IT : RadixTable<ID, I>>(
 
     override fun List<I>.insertIgnore() {
         val entities = this
-        transaction {
+        transaction(database) {
             identityTable.batchInsert(entities) {
                 this.createDefaultEntity(it)
             }
@@ -151,27 +204,37 @@ abstract class ExposedStore<ID, I : Identity<ID>, IT : RadixTable<ID, I>>(
 
     override fun I.updateIgnore() {
         val entity = this
-        transaction {
-            identityTable.update {
-                it.createDefaultEntity(entity)
+        transaction(database) {
+            identityTable.update(where = {
+                identityTable.uuid.eq(entity.uuid!!)
+            }) {
+                it.updateDefaultEntity(entity)
             }
         }
     }
 
     override fun List<I>.updateIgnore() {
         val entities = this
-        return transaction {
-            identityTable.batchReplace(entities) {
-                this.createDefaultEntity(it)
+        transaction(database) {
+            entities.forEach { entity ->
+                identityTable.update(where = {
+                    identityTable.uuid.eq(entity.uuid!!)
+                }) {
+                    it.updateDefaultEntity(entity)
+                }
             }
         }
     }
 
-    private fun <K : Any> UpdateBuilder<K>.createDefaultEntity(it: I) {
-        it.uuid?.also {
+    private fun <K : Any> UpdateBuilder<K>.createDefaultEntity(rowItem: I) {
+        rowItem.uuid?.also {
             this[identityTable.uuid] = it
         }
-        this[identityTable.creationDate] = it.creationDate
-        this.createEntity(it)
+        this[identityTable.creationDate] = rowItem.creationDate
+        this.createEntity(rowItem)
+    }
+
+    private fun <K : Any> UpdateBuilder<K>.updateDefaultEntity(rowItem: I) {
+        this.updateEntity(rowItem)
     }
 }
