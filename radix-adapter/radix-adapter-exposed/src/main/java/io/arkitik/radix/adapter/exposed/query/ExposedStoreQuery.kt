@@ -31,13 +31,11 @@ open class ExposedStoreQuery<ID, I : Identity<ID>, IT : RadixTable<ID, I>>(
         page: Int,
         size: Int,
         resultRowMapper: ResultRowMapper<T>,
-    ): PageData<I> =
+    ): PageData<T> =
         transaction(database) {
             val totalElements = count()
             val items = limit(size).offset((size * page).toLong())
-                .map { rowItem ->
-                    identityTable.mapToIdentity(rowItem, database)
-                }
+                .map(resultRowMapper)
             var totalPages = if (totalElements != 0L)
                 totalElements / size
             else 0
