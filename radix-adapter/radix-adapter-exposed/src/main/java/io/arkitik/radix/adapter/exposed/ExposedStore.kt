@@ -6,6 +6,7 @@ import io.arkitik.radix.develop.identity.Identity
 import io.arkitik.radix.develop.store.Store
 import io.arkitik.radix.develop.store.TransactionCommand
 import io.arkitik.radix.develop.store.query.StoreQuery
+import io.arkitik.radix.develop.store.updateIgnore
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.inList
@@ -17,7 +18,6 @@ import org.jetbrains.exposed.sql.statements.UpdateBuilder
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
 import org.jetbrains.exposed.sql.upsert
-import org.jetbrains.exposed.sql.upsertReturning
 import java.io.Serializable
 
 /**
@@ -164,7 +164,7 @@ abstract class ExposedStore<ID, I : Identity<ID>, IT : RadixTable<ID, I>>(
     override fun I.saveIgnore() {
         val entity = this
         transaction(database) {
-            identityTable.upsertReturning {
+            identityTable.upsert {
                 it.createDefaultEntity(entity)
             }
         }
@@ -216,13 +216,7 @@ abstract class ExposedStore<ID, I : Identity<ID>, IT : RadixTable<ID, I>>(
     override fun List<I>.updateIgnore() {
         val entities = this
         transaction(database) {
-            entities.forEach { entity ->
-                identityTable.update(where = {
-                    identityTable.uuid.eq(entity.uuid!!)
-                }) {
-                    it.updateDefaultEntity(entity)
-                }
-            }
+            entities.forEach(::updateIgnore)
         }
     }
 
