@@ -79,13 +79,17 @@ open class ExposedStoreQuery<ID, I : Identity<ID>, IT : RadixTable<ID, I>>(
 
     override fun find(uuid: ID): I? =
         transaction(database) {
-            identityTable.findIdentityByUuid(uuid)
+            identityTable.findIdentityByUuid(uuid, database)
         }
 
     override fun exist(uuid: ID): Boolean =
         transaction(database) {
-            !identityTable.select(identityTable.uuid).where {
+            identityTable.select(identityTable.uuid).where {
                 identityTable.uuid eq uuid
-            }.empty()
+            }.exist()
         }
+
+    protected fun Query.exist() = empty().not()
+
+    protected fun Query.doesNotExist() = empty()
 }

@@ -83,7 +83,7 @@ abstract class ExposedStore<ID, I : Identity<ID>, IT : RadixTable<ID, I>>(
             identityTable.upsert {
                 it.createDefaultEntity(this@save)
             }
-            identityTable.findIdentityByUuid(uuid!!)!!
+            identityTable.findIdentityByUuid(uuid!!, database)!!
         }
     }
 
