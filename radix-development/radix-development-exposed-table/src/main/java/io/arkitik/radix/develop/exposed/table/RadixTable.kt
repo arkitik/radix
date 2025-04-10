@@ -7,7 +7,6 @@ import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.javatime.CurrentDateTime
 import org.jetbrains.exposed.sql.javatime.datetime
-import org.jetbrains.exposed.sql.transactions.transaction
 import java.io.Serializable
 
 /**
@@ -25,7 +24,7 @@ abstract class RadixTable<ID, I>(
         get() = PrimaryKey(uuid)
 
     open fun findIdentityByUuid(uuid: ID, database: Database? = null): I? =
-        transaction(database) {
+        ensureInTransaction(database) {
             select(columns)
                 .where {
                     this@RadixTable.uuid eq uuid
