@@ -1,13 +1,13 @@
 package io.arkitik.radix.adapter.exposed.query
 
 import io.arkitik.radix.develop.exposed.table.RadixTable
+import io.arkitik.radix.develop.exposed.table.ensureInTransaction
 import io.arkitik.radix.develop.identity.Identity
 import io.arkitik.radix.develop.store.query.PageData
 import io.arkitik.radix.develop.store.query.StoreQuery
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.Query
 import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.transactions.transaction
 import java.io.Serializable
 
 typealias ResultRowMapper<T> = (resultRow: ResultRow) -> T
@@ -32,7 +32,7 @@ open class ExposedStoreQuery<ID, I : Identity<ID>, IT : RadixTable<ID, I>>(
         size: Int,
         resultRowMapper: ResultRowMapper<T>,
     ): PageData<T> =
-        transaction(database) {
+        ensureInTransaction(database) {
             val totalElements = count()
             val items = limit(size).offset((size * page).toLong())
                 .map(resultRowMapper)
@@ -53,7 +53,7 @@ open class ExposedStoreQuery<ID, I : Identity<ID>, IT : RadixTable<ID, I>>(
         }
 
     override fun all(): List<I> =
-        transaction(database) {
+        ensureInTransaction(database) {
             identityTable.select(identityTable.columns)
                 .map { rowItem ->
                     identityTable.mapToIdentity(rowItem, database)
@@ -61,14 +61,14 @@ open class ExposedStoreQuery<ID, I : Identity<ID>, IT : RadixTable<ID, I>>(
         }
 
     override fun all(page: Int, size: Int): PageData<I> {
-        return transaction(database) {
+        return ensureInTransaction(database) {
             identityTable.select(identityTable.columns)
                 .paged(page, size)
         }
     }
 
     override fun allByUuids(uuids: List<ID>): Iterable<I> =
-        transaction(database) {
+        ensureInTransaction(database) {
             identityTable.select(identityTable.columns)
                 .where {
                     identityTable.uuid inList uuids
@@ -78,12 +78,12 @@ open class ExposedStoreQuery<ID, I : Identity<ID>, IT : RadixTable<ID, I>>(
         }
 
     override fun find(uuid: ID): I? =
-        transaction(database) {
+        ensureInTransaction(database) {
             identityTable.findIdentityByUuid(uuid, database)
         }
 
     override fun exist(uuid: ID): Boolean =
-        transaction(database) {
+        ensureInTransaction(database) {
             identityTable.select(identityTable.uuid).where {
                 identityTable.uuid eq uuid
             }.exist()

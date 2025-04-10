@@ -2,6 +2,7 @@ package io.arkitik.radix.adapter.exposed
 
 import io.arkitik.radix.adapter.exposed.query.ExposedStoreQuery
 import io.arkitik.radix.develop.exposed.table.RadixTable
+import io.arkitik.radix.develop.exposed.table.ensureInTransaction
 import io.arkitik.radix.develop.identity.Identity
 import io.arkitik.radix.develop.store.Store
 import io.arkitik.radix.develop.store.TransactionCommand
@@ -15,7 +16,6 @@ import org.jetbrains.exposed.sql.batchUpsert
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.statements.UpdateBuilder
-import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
 import org.jetbrains.exposed.sql.upsert
 import java.io.Serializable
@@ -55,7 +55,7 @@ abstract class ExposedStore<ID, I : Identity<ID>, IT : RadixTable<ID, I>>(
 
     override fun ID.delete() {
         val recordUuid = this
-        transaction(database) {
+        ensureInTransaction(database) {
             identityTable.deleteWhere { identityTable.uuid eq recordUuid }
         }
     }
@@ -66,7 +66,7 @@ abstract class ExposedStore<ID, I : Identity<ID>, IT : RadixTable<ID, I>>(
 
     override fun List<ID>.deleteAllByIds() {
         val recordUuids = this
-        transaction(database) {
+        ensureInTransaction(database) {
             batchProcess(recordUuids) { chunk ->
                 identityTable.deleteWhere { identityTable.uuid inList chunk }
             }
@@ -79,7 +79,7 @@ abstract class ExposedStore<ID, I : Identity<ID>, IT : RadixTable<ID, I>>(
         level = DeprecationLevel.WARNING
     )
     override fun I.save(): I {
-        return transaction(database) {
+        return ensureInTransaction(database) {
             identityTable.upsert {
                 it.createDefaultEntity(this@save)
             }
@@ -93,7 +93,7 @@ abstract class ExposedStore<ID, I : Identity<ID>, IT : RadixTable<ID, I>>(
         level = DeprecationLevel.WARNING
     )
     override fun List<I>.save() =
-        transaction(database) {
+        ensureInTransaction(database) {
             identityTable.batchUpsert(this@save) {
                 this.createDefaultEntity(it)
             }.map { resultRow ->
@@ -104,7 +104,7 @@ abstract class ExposedStore<ID, I : Identity<ID>, IT : RadixTable<ID, I>>(
 
     override fun I.insert(): I {
         val recordToBeInserted = this
-        return transaction(database) {
+        return ensureInTransaction(database) {
             identityTable.insert { rowItem ->
                 rowItem.createDefaultEntity(recordToBeInserted)
             }
@@ -114,7 +114,7 @@ abstract class ExposedStore<ID, I : Identity<ID>, IT : RadixTable<ID, I>>(
 
     override fun List<I>.insert(): Iterable<I> {
         val entities = this
-        return transaction(database) {
+        return ensureInTransaction(database) {
             identityTable.batchInsert(entities) { rowItem ->
                 this.createDefaultEntity(rowItem)
             }.map { resultRow ->
@@ -125,7 +125,7 @@ abstract class ExposedStore<ID, I : Identity<ID>, IT : RadixTable<ID, I>>(
 
     override fun I.update(): I {
         val entity = this
-        return transaction(database) {
+        return ensureInTransaction(database) {
             identityTable.update(
                 where = {
                     identityTable.uuid.eq(entity.uuid!!)
@@ -139,7 +139,7 @@ abstract class ExposedStore<ID, I : Identity<ID>, IT : RadixTable<ID, I>>(
 
     override fun List<I>.update(): Iterable<I> {
         val entities = this
-        transaction(database) {
+        ensureInTransaction(database) {
             entities.forEach { entity ->
                 identityTable.update(where = {
                     identityTable.uuid.eq(entity.uuid!!)
@@ -152,7 +152,7 @@ abstract class ExposedStore<ID, I : Identity<ID>, IT : RadixTable<ID, I>>(
     }
 
     override fun <T> executeInTransaction(transactionCommand: TransactionCommand<T>) =
-        transaction(database) {
+        ensureInTransaction(database) {
             transactionCommand()
         }
 
@@ -163,7 +163,7 @@ abstract class ExposedStore<ID, I : Identity<ID>, IT : RadixTable<ID, I>>(
     )
     override fun I.saveIgnore() {
         val entity = this
-        transaction(database) {
+        ensureInTransaction(database) {
             identityTable.upsert {
                 it.createDefaultEntity(entity)
             }
@@ -177,7 +177,7 @@ abstract class ExposedStore<ID, I : Identity<ID>, IT : RadixTable<ID, I>>(
     )
     override fun List<I>.saveIgnore() {
         val entities = this
-        transaction(database) {
+        ensureInTransaction(database) {
             identityTable.batchUpsert(entities) {
                 this.createDefaultEntity(it)
             }
@@ -186,7 +186,7 @@ abstract class ExposedStore<ID, I : Identity<ID>, IT : RadixTable<ID, I>>(
 
     override fun I.insertIgnore() {
         val entity = this
-        transaction(database) {
+        ensureInTransaction(database) {
             identityTable.insert {
                 it.createDefaultEntity(entity)
             }
@@ -195,7 +195,7 @@ abstract class ExposedStore<ID, I : Identity<ID>, IT : RadixTable<ID, I>>(
 
     override fun List<I>.insertIgnore() {
         val entities = this
-        transaction(database) {
+        ensureInTransaction(database) {
             identityTable.batchInsert(entities) {
                 this.createDefaultEntity(it)
             }
@@ -204,7 +204,7 @@ abstract class ExposedStore<ID, I : Identity<ID>, IT : RadixTable<ID, I>>(
 
     override fun I.updateIgnore() {
         val entity = this
-        transaction(database) {
+        ensureInTransaction(database) {
             identityTable.update(where = {
                 identityTable.uuid.eq(entity.uuid!!)
             }) {
@@ -215,7 +215,7 @@ abstract class ExposedStore<ID, I : Identity<ID>, IT : RadixTable<ID, I>>(
 
     override fun List<I>.updateIgnore() {
         val entities = this
-        transaction(database) {
+        ensureInTransaction(database) {
             entities.forEach(::updateIgnore)
         }
     }
