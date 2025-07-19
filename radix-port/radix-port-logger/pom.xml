@@ -5,11 +5,12 @@
     <parent>
         <artifactId>radix-port</artifactId>
         <groupId>io.arkitik.radix</groupId>
-        <version>v2.4.4</version>
+        <version>v2.4.5</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>radix-port-logger</artifactId>
+    <name>radix-port-logger</name>
 
     <dependencies>
         <dependency>
