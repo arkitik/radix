@@ -6,8 +6,9 @@
 
     <groupId>io.arkitik.radix</groupId>
     <artifactId>radix</artifactId>
+    <name>radix</name>
     <packaging>pom</packaging>
-    <version>v2.4.4</version>
+    <version>v2.4.5</version>
     <modules>
         <module>radix-port</module>
         <module>radix-adapter</module>
@@ -16,7 +17,6 @@
         <module>radix-starter</module>
         <module>radix-tool</module>
     </modules>
-    <name>Radix Business Framework</name>
     <description>
         Shared business abstraction modules to develop any server project using kotlin
     </description>
@@ -47,12 +47,12 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>21</java.version>
 
-        <dokka.version>1.9.10</dokka.version>
-        <kotlin.version>1.9.22</kotlin.version>
+        <dokka.version>2.0.0</dokka.version>
+        <kotlin.version>2.2.0</kotlin.version>
 
-        <spring-boot.version>3.4.4</spring-boot.version>
-        <logbook.version>3.11.0</logbook.version>
-        <exposed.version>0.60.0</exposed.version>
+        <spring-boot.version>3.5.3</spring-boot.version>
+        <logbook.version>3.12.2</logbook.version>
+        <exposed.version>0.61.0</exposed.version>
     </properties>
     <dependencies>
         <dependency>
@@ -232,6 +232,16 @@
                     </dokkaPlugins>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.sonatype.central</groupId>
+                <artifactId>central-publishing-maven-plugin</artifactId>
+                <version>0.8.0</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <publishingServerId>central-sonatype</publishingServerId>
+                    <outputFilename>arkitik-radix-${project.version}.zip</outputFilename>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
     <profiles>
@@ -259,27 +269,8 @@
                             </execution>
                         </executions>
                     </plugin>
-                    <plugin>
-                        <groupId>org.sonatype.plugins</groupId>
-                        <artifactId>nexus-staging-maven-plugin</artifactId>
-                        <version>1.6.13</version>
-                        <extensions>true</extensions>
-                        <configuration>
-                            <stagingProfileId>${sonatype.stagingProfileId}</stagingProfileId>
-                            <serverId>s01-ossrh</serverId>
-                            <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
-                        </configuration>
-                    </plugin>
                 </plugins>
             </build>
         </profile>
     </profiles>
-
-    <pluginRepositories>
-        <pluginRepository>
-            <id>jcenter</id>
-            <name>JCenter</name>
-            <url>https://jcenter.bintray.com/</url>
-        </pluginRepository>
-    </pluginRepositories>
 </project>

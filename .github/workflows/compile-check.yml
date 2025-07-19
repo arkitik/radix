@@ -1,0 +1,45 @@
+name: Compile Check
+
+on:
+  push:
+    tags-ignore:
+      - '*v'
+  pull_request:
+
+jobs:
+  compile:
+    name: Compile Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+          cache: 'maven'
+
+      - name: Compile
+        run: mvn -B clean compile
+
+      - name: Validate Project Structure
+        run: |
+          echo "Validating module structure..."
+          for module in travako-core travako-starter travako-engine; do
+            if [ ! -d "$module" ]; then
+              echo "Error: Module $module not found"
+              exit 1
+            fi
+          done
+          echo "Module structure validation completed successfully"
+
+      - name: Notify on Success
+        if: success()
+        run: echo "✅ Code compiles successfully"
+
+      - name: Notify on Failure
+        if: failure()
+        run: echo "❌ Compilation failed"

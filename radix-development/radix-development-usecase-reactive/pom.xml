@@ -5,11 +5,12 @@
     <parent>
         <artifactId>radix-development</artifactId>
         <groupId>io.arkitik.radix</groupId>
-        <version>v2.4.4</version>
+        <version>v2.4.5</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>radix-development-usecase-reactive</artifactId>
+    <name>radix-development-usecase-reactive</name>
     <dependencies>
         <dependency>
             <groupId>${project.parent.groupId}</groupId>
