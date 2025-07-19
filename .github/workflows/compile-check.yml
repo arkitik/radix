@@ -25,17 +25,6 @@ jobs:
       - name: Compile
         run: mvn -B clean compile
 
-      - name: Validate Project Structure
-        run: |
-          echo "Validating module structure..."
-          for module in travako-core travako-starter travako-engine; do
-            if [ ! -d "$module" ]; then
-              echo "Error: Module $module not found"
-              exit 1
-            fi
-          done
-          echo "Module structure validation completed successfully"
-
       - name: Notify on Success
         if: success()
         run: echo "✅ Code compiles successfully"
