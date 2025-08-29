@@ -37,6 +37,7 @@ jobs:
           npm install -g @semantic-release/git
           npm install -g @semantic-release/changelog
           npm install -g @semantic-release/exec
+          npm install -g conventional-changelog-conventionalcommits
 
       - name: Import GPG key
         uses: crazy-max/ghaction-import-gpg@v6

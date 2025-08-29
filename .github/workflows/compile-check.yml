@@ -3,7 +3,7 @@ name: Compile Check
 on:
   push:
     tags-ignore:
-      - '*v'
+      - 'v*'
   pull_request:
 
 jobs:
