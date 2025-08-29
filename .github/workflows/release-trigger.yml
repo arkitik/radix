@@ -58,7 +58,7 @@ jobs:
           BRANCH_NAME=${GITHUB_REF#refs/heads/}
           echo "Current branch: $BRANCH_NAME"
           
-          if [[ $BRANCH_NAME =~ ^1\. ]]; then
+          if [[ $BRANCH_NAME =~ ^1\. ]] || [[ $BRANCH_NAME == "1.x.x" ]]; then
             echo "Detected 1.x.x branch - will use maintenance versioning"
             echo "is_maintenance_branch=true" >> $GITHUB_OUTPUT
           else
@@ -79,6 +79,11 @@ jobs:
           {
             "branches": [
               "main",
+              {
+                "name": "1.x.x",
+                "range": "1.x.x",
+                "channel": "1.x"
+              },
               {
                 "name": "1.+([0-9])?(.{+([0-9]),x}).x",
                 "range": "1.x.x",
@@ -123,6 +128,11 @@ jobs:
           {
             "branches": [
               "main",
+              {
+                "name": "1.x.x",
+                "range": "1.x.x",
+                "channel": "1.x"
+              },
               {
                 "name": "1.+([0-9])?(.{+([0-9]),x}).x",
                 "range": "1.x.x",
