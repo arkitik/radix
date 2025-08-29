@@ -1,0 +1,162 @@
+name: Release Trigger
+
+on:
+  workflow_dispatch:
+
+jobs:
+  release:
+    permissions:
+      contents: write
+      id-token: write
+      actions: write
+      pull-requests: write
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Set up JDK 8
+        uses: actions/setup-java@v5
+        with:
+          distribution: 'temurin'
+          java-version: '8'
+          cache: 'maven'
+          server-id: 'central-sonatype' # Matches publishingServerId from the plugin
+          server-username: CENTRAL_USERNAME
+          server-password: CENTRAL_TOKEN
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install semantic-release
+        run: |
+          npm install -g semantic-release
+          npm install -g @semantic-release/git
+          npm install -g @semantic-release/changelog
+          npm install -g @semantic-release/exec
+
+      - name: Import GPG key
+        uses: crazy-max/ghaction-import-gpg@v6
+        with:
+          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.GPG_PASSPHRASE }}
+
+      - name: Validate Credentials
+        run: |
+          if [ -z "${{ secrets.CENTRAL_USERNAME }}" ] || [ -z "${{ secrets.CENTRAL_TOKEN }}" ]; then
+            echo "Error: CENTRAL_USERNAME or CENTRAL_TOKEN secrets are not set or empty"
+            exit 1
+          fi
+          echo "✓ Maven Central credentials validated"
+
+      - name: Detect branch and set versioning strategy
+        id: branch-info
+        run: |
+          BRANCH_NAME=${GITHUB_REF#refs/heads/}
+          echo "Current branch: $BRANCH_NAME"
+          
+          if [[ $BRANCH_NAME =~ ^1\. ]]; then
+            echo "Detected 1.x.x branch - will use maintenance versioning"
+            echo "is_maintenance_branch=true" >> $GITHUB_OUTPUT
+          else
+            echo "Detected main/feature branch - will use standard versioning"
+            echo "is_maintenance_branch=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create .releaserc
+        env:
+          CENTRAL_USERNAME: ${{ secrets.CENTRAL_USERNAME }}
+          CENTRAL_TOKEN: ${{ secrets.CENTRAL_TOKEN }}
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [ "${{ steps.branch-info.outputs.is_maintenance_branch }}" = "true" ]; then
+            # Configuration for 1.x.x maintenance branches
+            cat > .releaserc << EOF
+          {
+            "branches": [
+              "main",
+              {
+                "name": "1.+([0-9])?(.{+([0-9]),x}).x",
+                "range": "1.x.x",
+                "channel": "1.x"
+              }
+            ],
+            "plugins": [
+              ["@semantic-release/commit-analyzer", {
+                "preset": "conventionalcommits",
+                "releaseRules": [
+                  {"type": "feat", "release": "patch"},
+                  {"type": "fix", "release": "patch"},
+                  {"type": "perf", "release": "patch"},
+                  {"type": "revert", "release": "patch"}
+                ]
+              }],
+              ["@semantic-release/release-notes-generator", {
+                "preset": "conventionalcommits"
+              }],
+              "@semantic-release/changelog",
+              ["@semantic-release/exec", {
+                "prepareCmd": "./.release.sh \${nextRelease.version}"
+              }],
+              ["@semantic-release/github", {
+                "assets": [
+                  {
+                    "path": "release-artifacts/*.zip",
+                    "label": "Distribution Archive (v1.x maintenance)"
+                  }
+                ]
+              }],
+              ["@semantic-release/git", {
+                "assets": ["CHANGELOG.md", "pom.xml", "**/pom.xml", "README.md"],
+                "message": "chore(release): \${nextRelease.version} [skip ci] [1.x maintenance]\n\n\${nextRelease.notes}"
+              }]
+            ]
+          }
+          EOF
+          else
+            # Configuration for main branch (2.x.x and beyond)
+            cat > .releaserc << EOF
+          {
+            "branches": [
+              "main",
+              {
+                "name": "1.+([0-9])?(.{+([0-9]),x}).x",
+                "range": "1.x.x",
+                "channel": "1.x"
+              }
+            ],
+            "plugins": [
+              "@semantic-release/commit-analyzer",
+              "@semantic-release/release-notes-generator",
+              "@semantic-release/changelog",
+              ["@semantic-release/exec", {
+                "prepareCmd": "./.release.sh \${nextRelease.version}"
+              }],
+              ["@semantic-release/github", {
+                "assets": [
+                  {
+                    "path": "release-artifacts/*.zip",
+                    "label": "Distribution Archive"
+                  }
+                ]
+              }],
+              ["@semantic-release/git", {
+                "assets": ["CHANGELOG.md", "pom.xml", "**/pom.xml", "README.md"],
+                "message": "chore(release): \${nextRelease.version} [skip ci]\n\n\${nextRelease.notes}"
+              }]
+            ]
+          }
+          EOF
+          fi
+
+      - name: Release
+        env:
+          CENTRAL_USERNAME: ${{ secrets.CENTRAL_USERNAME }}
+          CENTRAL_TOKEN: ${{ secrets.CENTRAL_TOKEN }}
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npx semantic-release

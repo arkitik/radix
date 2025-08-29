@@ -15,6 +15,5 @@
     <modules>
         <module>radix-starter-logger</module>
         <module>radix-starter-logger-webflux</module>
-        <module>radix-starter-exposed</module>
     </modules>
 </project>

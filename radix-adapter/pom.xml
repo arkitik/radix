@@ -15,7 +15,6 @@
     <modules>
         <module>radix-adapter-shared</module>
         <module>radix-adapter-jpa-spec-ext</module>
-        <module>radix-adapter-exposed</module>
     </modules>
 
 

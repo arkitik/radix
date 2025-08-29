@@ -23,7 +23,6 @@
         <module>radix-development-usecase-ext</module>
         <module>radix-development-usecase-reactive</module>
         <module>radix-development-operation</module>
-        <module>radix-development-exposed-table</module>
     </modules>
 
 

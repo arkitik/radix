@@ -99,21 +99,6 @@
                 <artifactId>radix-adapter-jpa-spec-ext</artifactId>
                 <version>${project.parent.version}</version>
             </dependency>
-            <dependency>
-                <groupId>${project.parent.groupId}</groupId>
-                <artifactId>radix-development-exposed-table</artifactId>
-                <version>${project.parent.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>${project.parent.groupId}</groupId>
-                <artifactId>radix-adapter-exposed</artifactId>
-                <version>${project.parent.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>${project.parent.groupId}</groupId>
-                <artifactId>radix-starter-exposed</artifactId>
-                <version>${project.parent.version}</version>
-            </dependency>
         </dependencies>
     </dependencyManagement>
 </project>
