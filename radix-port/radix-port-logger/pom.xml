@@ -10,6 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>radix-port-logger</artifactId>
+    <name>radix-port-logger</name>
 
     <dependencies>
         <dependency>

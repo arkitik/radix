@@ -10,6 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>radix-tool</artifactId>
+    <name>radix-tool</name>
     <packaging>pom</packaging>
     <modules>
         <module>radix-tool-http</module>

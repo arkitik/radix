@@ -10,6 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>radix-development-shared</artifactId>
+    <name>radix-development-shared</name>
 
 
 </project>

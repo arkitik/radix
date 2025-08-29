@@ -10,6 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>radix-adapter-jpa-spec-ext</artifactId>
+    <name>radix-adapter-jpa-spec-ext</name>
     <dependencies>
         <dependency>
             <groupId>org.springframework.data</groupId>

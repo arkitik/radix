@@ -3,10 +3,11 @@ arkitik:
     logger:
       formatter: json
       logger-name: io.arkitik.radix.starter.logger.SampleApp
-      masked-keys:
-        - userUuid
-        - user-agent
-        - accept
+      ignored:
+        fields:
+          - userUuid
+          - user-agent
+          - accept
 logging:
   level:
     io:
