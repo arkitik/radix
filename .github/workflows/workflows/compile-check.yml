@@ -13,17 +13,16 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
-
+        uses: actions/checkout@v5
       - name: Set up JDK 21
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: 'temurin'
           java-version: '21'
           cache: 'maven'
 
       - name: Compile
-        run: mvn -B clean compile
+        run: mvn -B clean compile -T 1C
 
       - name: Notify on Success
         if: success()
