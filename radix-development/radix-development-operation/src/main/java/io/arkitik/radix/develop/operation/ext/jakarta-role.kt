@@ -1,4 +1,4 @@
-package io.arkitik.radix.develop.operation.ext.function
+package io.arkitik.radix.develop.operation.ext
 
 import io.arkitik.radix.develop.operation.OperationRole
 import io.arkitik.radix.develop.shared.error.ErrorResponse
@@ -15,38 +15,31 @@ import jakarta.validation.Validator
  */
 object DefaultJakartaValidator : JakartaValidator<Any>()
 
+typealias ErrorMapper = (ConstraintViolation<*>) -> ErrorResponse
+
 open class JakartaValidator<T>(
     private val validator: Validator = Validation.buildDefaultValidatorFactory().validator,
-    private val errorMapper: ErrorMapper = DefaultErrorMapper,
+    errorMapper: ErrorMapper? = null,
 ) : OperationRole<T, Unit> {
+    private val errorMapper = errorMapper ?: { constraint ->
+        RadixError(constraint.message, constraint.propertyPath.toString())
+    }
+
     final override fun T.operateRole() {
         validator.run {
             validate(this@operateRole)
         }.takeIf {
             it.isNotEmpty()
-        }?.map {
-            errorMapper.run {
-                it.mapToError()
+        }?.map(errorMapper)
+            ?.badRequest()?.run {
+                throw this
             }
-        }?.badRequest()?.run {
-            throw this
-        }
     }
 }
 
-object DefaultErrorMapper : ErrorMapper {
-    override fun <RQ> ConstraintViolation<RQ>.mapToError(): ErrorResponse {
-        val nodes = propertyPath.toList()
-        return when {
-            nodes.isNotEmpty() -> {
-                RadixError(nodes[nodes.size - 1].name, message)
-            }
-
-            else -> RadixError(message, propertyPath.toString())
-        }
-    }
-}
-
-interface ErrorMapper {
-    fun <RQ> ConstraintViolation<RQ>.mapToError(): ErrorResponse
+fun <RQ, RS> OperationBuilder<RQ, RS>.installJakartaValidation(
+    validator: Validator = Validation.buildDefaultValidatorFactory().validator,
+    errorMapper: ErrorMapper? = null,
+) {
+    install(JakartaValidator(validator, errorMapper))
 }
