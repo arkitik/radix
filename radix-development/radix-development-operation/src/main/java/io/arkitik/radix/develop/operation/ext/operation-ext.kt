@@ -9,6 +9,9 @@ import io.arkitik.radix.develop.operation.Operator
  * Created At 02, **Tue March, 2021**
  * Project *radix* [https://arkitik.io]
  */
+
+typealias UnitOperation<RQ> = Operation<RQ, Unit>
+
 infix fun <RQ, RS> Operation<RQ, RS>.runOperation(request: RQ) = request.operate()
 
 infix fun <RQ, RS> OperationRole<RQ, RS>.operateRole(request: RQ) = request.operateRole()

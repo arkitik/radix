@@ -198,13 +198,15 @@ class FindUserByUuidUseCase(
 ```
 
 and finally the usecase-factory implementation:
+
 ```kotlin
 class UserUseCaseFactoryImpl(
-  userStore: UserStore,
+    userStore: UserStore,
 ) : BankUseCaseFactory {
-  override val findUserByUuidUseCase = FindUserByUuidUseCase(userStore.storeQuery)
+    override val findUserByUuidUseCase = FindUserByUuidUseCase(userStore.storeQuery)
 }
 ```
+
 ----
 Of course, don't forget to provide the implementation for the identity (i.e. entity) and the store (i.e. adapter).
 For more examples, please refer to the [Documentation][radix-documentation-url].

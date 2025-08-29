@@ -10,6 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>radix-development-usecase-reactive</artifactId>
+    <name>radix-development-usecase-reactive</name>
     <dependencies>
         <dependency>
             <groupId>${project.parent.groupId}</groupId>

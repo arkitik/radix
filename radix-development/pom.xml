@@ -10,6 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>radix-development</artifactId>
+    <name>radix-development</name>
     <packaging>pom</packaging>
     <modules>
         <module>radix-development-store</module>
@@ -22,7 +23,7 @@
         <module>radix-development-usecase-ext</module>
         <module>radix-development-usecase-reactive</module>
         <module>radix-development-operation</module>
-        <module>radix-development-operation-ext</module>
+        <module>radix-development-exposed-table</module>
     </modules>
 
 

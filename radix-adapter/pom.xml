@@ -10,10 +10,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>radix-adapter</artifactId>
+    <name>radix-adapter</name>
     <packaging>pom</packaging>
     <modules>
         <module>radix-adapter-shared</module>
         <module>radix-adapter-jpa-spec-ext</module>
+        <module>radix-adapter-exposed</module>
     </modules>
 
 

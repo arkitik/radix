@@ -10,6 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>radix-development-usecase-ext</artifactId>
+    <name>radix-development-usecase-ext</name>
 
     <dependencies>
         <dependency>

@@ -1,12 +1,17 @@
 package io.arkitik.radix.develop.usecase.adapter
 
-import io.arkitik.radix.develop.usecase.*
+import io.arkitik.radix.develop.usecase.CommandUseCase
+import io.arkitik.radix.develop.usecase.FunctionalUseCase
+import io.arkitik.radix.develop.usecase.command
+import io.arkitik.radix.develop.usecase.execute
 import io.arkitik.radix.develop.usecase.factory.UseCaseFactory
+import io.arkitik.radix.develop.usecase.functional
 import io.arkitik.radix.develop.usecase.model.UseCaseRequest
 import io.arkitik.radix.develop.usecase.model.UseCaseResponse
+import io.arkitik.radix.develop.usecase.process
 
 /**
- * Created By [*Ibrahim AlTamimi *](https://www.linkedin.com/in/iloom/)
+ * Created By [*Ibrahim Al-Tamimi *](https://www.linkedin.com/in/iloom/)
  * Created At 07, **Sat Nov, 2020**
  * Project **radix** [https://arkitik.io](https://arkitik.io)
  */
