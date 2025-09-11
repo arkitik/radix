@@ -28,16 +28,15 @@ abstract class AuditableStoreImpl<ID, I, E, A : AuditRecordIdentity<ID, I>>(
 ), AuditableStore<ID, I, A> where ID : Serializable, ID : Comparable<ID>, I : Identity<ID>, E : RadixTable<ID, I> {
 
     companion object {
-        private const val RADIX_ACTOR_ID = "RADIX_AUDIT"
-        private const val RADIX_ACTOR = "RADIX-AUDIT-ACTOR"
+        private const val RADIX_ACTOR = "RADIX-AUDIT"
     }
 
     override fun identityCreator(): StoreIdentityCreator<ID, I> {
-        return DefaultIdentityStoreCreator(identityCreator(RADIX_ACTOR_ID, RADIX_ACTOR))
+        return DefaultIdentityStoreCreator(identityCreator(RADIX_ACTOR, RADIX_ACTOR))
     }
 
     override fun I.identityUpdater(): StoreIdentityUpdater<ID, I> {
-        return DefaultIdentityStoreUpdater(identityUpdater(RADIX_ACTOR_ID, RADIX_ACTOR))
+        return DefaultIdentityStoreUpdater(identityUpdater(RADIX_ACTOR, RADIX_ACTOR))
     }
 
     abstract override fun identityCreator(actorId: String, actorType: String): CoreAuditStoreIdentityCreator<ID, I, A>
