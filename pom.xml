@@ -16,6 +16,7 @@
         <module>radix-dependencies</module>
         <module>radix-starter</module>
         <module>radix-tool</module>
+        <module>radix-audit</module>
     </modules>
     <description>
         Shared business abstraction modules to develop any server project using kotlin
@@ -50,7 +51,7 @@
         <dokka.version>2.0.0</dokka.version>
         <kotlin.version>2.2.0</kotlin.version>
 
-        <spring-boot.version>3.5.3</spring-boot.version>
+        <spring-boot.version>3.5.5</spring-boot.version>
         <logbook.version>3.12.2</logbook.version>
         <exposed.version>0.61.0</exposed.version>
     </properties>

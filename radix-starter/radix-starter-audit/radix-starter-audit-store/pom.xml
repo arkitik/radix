@@ -2,20 +2,20 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
     <parent>
-        <artifactId>radix</artifactId>
         <groupId>io.arkitik.radix</groupId>
+        <artifactId>radix-starter-audit</artifactId>
         <version>v2.4.5</version>
     </parent>
-    <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>radix-starter</artifactId>
-    <name>radix-starter</name>
+    <artifactId>radix-starter-audit-store</artifactId>
+    <name>radix-starter-audit-store</name>
     <packaging>pom</packaging>
     <modules>
-        <module>radix-starter-logger</module>
-        <module>radix-starter-logger-webflux</module>
-        <module>radix-starter-exposed</module>
-        <module>radix-starter-audit</module>
+        <module>radix-starter-audit-store-core</module>
+        <module>radix-starter-audit-store-adapter</module>
+        <module>radix-starter-audit-store-adapter-exposed</module>
     </modules>
+
 </project>

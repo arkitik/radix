@@ -16,17 +16,12 @@
         <dependencies>
             <dependency>
                 <groupId>${project.parent.groupId}</groupId>
-                <artifactId>radix-adapter-shared</artifactId>
+                <artifactId>radix-development-operation</artifactId>
                 <version>${project.parent.version}</version>
             </dependency>
             <dependency>
                 <groupId>${project.parent.groupId}</groupId>
-                <artifactId>radix-development-identity</artifactId>
-                <version>${project.parent.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>${project.parent.groupId}</groupId>
-                <artifactId>radix-development-shared</artifactId>
+                <artifactId>radix-development-exposed-table</artifactId>
                 <version>${project.parent.version}</version>
             </dependency>
             <dependency>
@@ -36,17 +31,12 @@
             </dependency>
             <dependency>
                 <groupId>${project.parent.groupId}</groupId>
-                <artifactId>radix-development-usecase</artifactId>
-                <version>${project.parent.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>${project.parent.groupId}</groupId>
-                <artifactId>radix-development-usecase-action</artifactId>
-                <version>${project.parent.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>${project.parent.groupId}</groupId>
                 <artifactId>radix-development-usecase-validation</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.parent.groupId}</groupId>
+                <artifactId>radix-development-usecase-reactive</artifactId>
                 <version>${project.parent.version}</version>
             </dependency>
             <dependency>
@@ -56,9 +46,30 @@
             </dependency>
             <dependency>
                 <groupId>${project.parent.groupId}</groupId>
+                <artifactId>radix-development-identity</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.parent.groupId}</groupId>
                 <artifactId>radix-development-usecase-ext</artifactId>
                 <version>${project.parent.version}</version>
             </dependency>
+            <dependency>
+                <groupId>${project.parent.groupId}</groupId>
+                <artifactId>radix-development-usecase</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.parent.groupId}</groupId>
+                <artifactId>radix-development-shared</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.parent.groupId}</groupId>
+                <artifactId>radix-development-usecase-action</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>${project.parent.groupId}</groupId>
                 <artifactId>radix-port-logger</artifactId>
@@ -66,7 +77,72 @@
             </dependency>
             <dependency>
                 <groupId>${project.parent.groupId}</groupId>
+                <artifactId>radix-audit-sdk</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.parent.groupId}</groupId>
+                <artifactId>radix-adapter-exposed</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.parent.groupId}</groupId>
+                <artifactId>radix-audit-operation</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.parent.groupId}</groupId>
+                <artifactId>radix-audit-adapter</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.parent.groupId}</groupId>
+                <artifactId>radix-audit-store</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.parent.groupId}</groupId>
+                <artifactId>radix-adapter-jpa-spec-ext</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.parent.groupId}</groupId>
+                <artifactId>radix-adapter-shared</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.parent.groupId}</groupId>
+                <artifactId>radix-audit-domain</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.parent.groupId}</groupId>
+                <artifactId>radix-starter-audit-store-adapter</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.parent.groupId}</groupId>
+                <artifactId>radix-starter-audit-store-adapter-exposed</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.parent.groupId}</groupId>
+                <artifactId>radix-starter-audit-store-core</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.parent.groupId}</groupId>
+                <artifactId>radix-starter-exposed</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.parent.groupId}</groupId>
                 <artifactId>radix-starter-logger</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.parent.groupId}</groupId>
+                <artifactId>radix-starter-logger-webflux</artifactId>
                 <version>${project.parent.version}</version>
             </dependency>
             <dependency>
@@ -77,41 +153,6 @@
             <dependency>
                 <groupId>${project.parent.groupId}</groupId>
                 <artifactId>radix-tool-json-dsl</artifactId>
-                <version>${project.parent.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>${project.parent.groupId}</groupId>
-                <artifactId>radix-starter-logger-webflux</artifactId>
-                <version>${project.parent.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>${project.parent.groupId}</groupId>
-                <artifactId>radix-development-usecase-reactive</artifactId>
-                <version>${project.parent.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>${project.parent.groupId}</groupId>
-                <artifactId>radix-development-operation</artifactId>
-                <version>${project.parent.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>${project.parent.groupId}</groupId>
-                <artifactId>radix-adapter-jpa-spec-ext</artifactId>
-                <version>${project.parent.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>${project.parent.groupId}</groupId>
-                <artifactId>radix-development-exposed-table</artifactId>
-                <version>${project.parent.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>${project.parent.groupId}</groupId>
-                <artifactId>radix-adapter-exposed</artifactId>
-                <version>${project.parent.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>${project.parent.groupId}</groupId>
-                <artifactId>radix-starter-exposed</artifactId>
                 <version>${project.parent.version}</version>
             </dependency>
         </dependencies>
