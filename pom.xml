@@ -9,6 +9,7 @@
     <name>radix</name>
     <packaging>pom</packaging>
     <version>v2.4.5</version>
+
     <modules>
         <module>radix-port</module>
         <module>radix-adapter</module>
