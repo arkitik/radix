@@ -5,9 +5,12 @@ import io.arkitik.radix.develop.exposed.table.ensureInTransaction
 import io.arkitik.radix.develop.identity.Identity
 import io.arkitik.radix.develop.store.query.PageData
 import io.arkitik.radix.develop.store.query.StoreQuery
-import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.Query
-import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.v1.core.ResultRow
+import org.jetbrains.exposed.v1.core.eq
+import org.jetbrains.exposed.v1.core.inList
+import org.jetbrains.exposed.v1.jdbc.Database
+import org.jetbrains.exposed.v1.jdbc.Query
+import org.jetbrains.exposed.v1.jdbc.select
 import java.io.Serializable
 
 typealias ResultRowMapper<T> = (resultRow: ResultRow) -> T
@@ -52,6 +55,16 @@ open class ExposedStoreQuery<ID, I : Identity<ID>, IT : RadixTable<ID, I>>(
             )
         }
 
+    protected open fun <T> Query.unPaged(
+        page: Int,
+        size: Int,
+        resultRowMapper: ResultRowMapper<T>,
+    ): List<T> =
+        ensureInTransaction(database) {
+            limit(size).offset((size * page).toLong())
+                .map(resultRowMapper)
+        }
+
     override fun all(): List<I> =
         ensureInTransaction(database) {
             identityTable.select(identityTable.columns)
@@ -89,7 +102,7 @@ open class ExposedStoreQuery<ID, I : Identity<ID>, IT : RadixTable<ID, I>>(
             }.exist()
         }
 
-    protected fun Query.exist() = empty().not()
+    protected fun Query.exist() = !doesNotExist()
 
     protected fun Query.doesNotExist() = empty()
 }

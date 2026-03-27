@@ -1,12 +1,14 @@
 package io.arkitik.radix.develop.exposed.table
 
 import io.arkitik.radix.develop.identity.Identity
-import org.jetbrains.exposed.sql.Column
-import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.javatime.CurrentDateTime
-import org.jetbrains.exposed.sql.javatime.datetime
+import org.jetbrains.exposed.v1.core.Column
+import org.jetbrains.exposed.v1.core.ResultRow
+import org.jetbrains.exposed.v1.core.Table
+import org.jetbrains.exposed.v1.core.eq
+import org.jetbrains.exposed.v1.javatime.CurrentDateTime
+import org.jetbrains.exposed.v1.javatime.datetime
+import org.jetbrains.exposed.v1.jdbc.Database
+import org.jetbrains.exposed.v1.jdbc.select
 import java.io.Serializable
 
 /**
@@ -20,8 +22,7 @@ abstract class RadixTable<ID, I>(
     val creationDate =
         datetime("creation_date").defaultExpression(CurrentDateTime)
 
-    override val primaryKey: PrimaryKey
-        get() = PrimaryKey(uuid)
+    override val primaryKey: PrimaryKey = PrimaryKey(uuid)
 
     open fun findIdentityByUuid(uuid: ID, database: Database? = null): I? =
         ensureInTransaction(database) {

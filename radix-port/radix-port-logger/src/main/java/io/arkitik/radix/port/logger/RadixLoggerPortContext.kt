@@ -8,6 +8,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.util.AntPathMatcher
 import org.zalando.logbook.Logbook
 import org.zalando.logbook.core.BodyFilters
 import org.zalando.logbook.core.Conditions
@@ -32,6 +33,7 @@ class RadixLoggerPortContext {
         customizers: List<RadixLoggerCustomizer>,
     ): Logbook =
         with(Logbook.builder()) {
+            val pathMatcher = AntPathMatcher()
             correlationId { UUID.randomUUID().toString() }
             bodyFilter(
                 BodyFilters.replaceFormUrlEncodedProperty(
@@ -45,7 +47,28 @@ class RadixLoggerPortContext {
                     radixLoggerConfig.mask
                 )
             )
+            bodyFilter(
+                JsonBodyFilters.replaceJsonStringProperty(
+                    { key ->
+                        radixLoggerConfig.ignored.fields.any {
+                            pathMatcher.match(it, key)
+                        }
+                    },
+                    radixLoggerConfig.mask
+
+                )
+            )
             headerFilter(HeaderFilters.replaceHeaders(radixLoggerConfig.ignored.fields, radixLoggerConfig.mask))
+            headerFilter(
+                HeaderFilters.replaceHeaders(
+                    { key ->
+                        radixLoggerConfig.ignored.fields.any {
+                            pathMatcher.match(it, key)
+                        }
+                    },
+                    radixLoggerConfig.mask
+                )
+            )
             headerFilter(
                 HeaderFilters.replaceCookies(
                     { radixLoggerConfig.ignored.fields.contains(it) },
