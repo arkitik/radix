@@ -54,6 +54,7 @@
         <spring-boot.version>4.0.4</spring-boot.version>
         <logbook.version>4.0.3</logbook.version>
         <exposed.version>1.1.1</exposed.version>
+
     </properties>
     <dependencies>
         <dependency>
