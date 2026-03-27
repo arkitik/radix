@@ -6,7 +6,7 @@
     <parent>
         <groupId>io.arkitik.radix</groupId>
         <artifactId>radix-audit</artifactId>
-        <version>v2.5.0</version>
+        <version>v3.0.0</version>
     </parent>
 
     <artifactId>radix-audit-store</artifactId>

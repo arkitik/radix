@@ -1,3 +1,19 @@
+# [3.0.0](https://github.com/arkitik/radix/compare/v2.5.0...v3.0.0) (2026-03-27)
+
+
+* Merge pull request [#47](https://github.com/arkitik/radix/issues/47) from arkitik/release-3 ([6911752](https://github.com/arkitik/radix/commit/6911752e3a8bd6b65ea1311ab3be77f27583f24d))
+
+
+### Features
+
+* Upgrade to latest springboot 4.0.4 and exposed 1.1.1 ([fa9965b](https://github.com/arkitik/radix/commit/fa9965bc51e4b9a98b9706ce94609ad20ab01037))
+
+
+### BREAKING CHANGES
+
+* Upgrade to latest springboot 4.0.4 and exposed 1.1.1
+* Upgrade to latest springboot 4.0.4 and exposed 1.1.1
+
 # [2.5.0](https://github.com/arkitik/radix/compare/v2.4.5...v2.5.0) (2025-09-11)
 
 
