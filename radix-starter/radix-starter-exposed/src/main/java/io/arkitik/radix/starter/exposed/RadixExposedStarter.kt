@@ -1,12 +1,12 @@
 package io.arkitik.radix.starter.exposed
 
-import org.jetbrains.exposed.spring.autoconfigure.ExposedAutoConfiguration
-import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.DatabaseConfig
+import org.jetbrains.exposed.v1.core.DatabaseConfig
+import org.jetbrains.exposed.v1.jdbc.Database
+import org.jetbrains.exposed.v1.spring.boot4.autoconfigure.ExposedAutoConfiguration
 import org.springframework.boot.autoconfigure.AutoConfiguration
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+import org.springframework.boot.jdbc.autoconfigure.DataSourceAutoConfiguration
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.transaction.annotation.EnableTransactionManagement
@@ -14,7 +14,7 @@ import javax.sql.DataSource
 
 /**
  * Created By Ibrahim Al-Tamimi 
- * Created At 1:15 PM, 30/06/2024
+ * Created At 1:15 PM, 30/06/2024
  */
 @Configuration
 @AutoConfiguration(after = [DataSourceAutoConfiguration::class])

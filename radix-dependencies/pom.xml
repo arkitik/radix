@@ -147,12 +147,12 @@
             </dependency>
             <dependency>
                 <groupId>${project.parent.groupId}</groupId>
-                <artifactId>radix-tool-http</artifactId>
+                <artifactId>radix-starter-logger-rest-client</artifactId>
                 <version>${project.parent.version}</version>
             </dependency>
             <dependency>
                 <groupId>${project.parent.groupId}</groupId>
-                <artifactId>radix-tool-json-dsl</artifactId>
+                <artifactId>radix-starter-logger-rest-template</artifactId>
                 <version>${project.parent.version}</version>
             </dependency>
         </dependencies>

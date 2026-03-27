@@ -11,7 +11,7 @@ import io.arkitik.radix.starter.audit.store.adapter.exposed.creator.DefaultIdent
 import io.arkitik.radix.starter.audit.store.adapter.exposed.updater.CoreAuditStoreIdentityUpdater
 import io.arkitik.radix.starter.audit.store.adapter.exposed.updater.DefaultIdentityStoreUpdater
 import io.arkitik.radix.starter.audit.store.core.AuditableStore
-import org.jetbrains.exposed.sql.Database
+import org.jetbrains.exposed.v1.jdbc.Database
 import java.io.Serializable
 
 /**

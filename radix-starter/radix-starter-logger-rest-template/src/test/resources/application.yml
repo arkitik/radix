@@ -1,0 +1,17 @@
+arkitik:
+  radix:
+    logger:
+      formatter: json
+      logger-name: io.arkitik.radix.starter.logger.rest.template.SampleRestClientApp
+      ignored:
+        fields:
+          - userUuid
+          - user-agent
+          - accept
+          - cf**
+          - nel
+          - report-to
+logging:
+  level:
+    io:
+      arkitik: trace

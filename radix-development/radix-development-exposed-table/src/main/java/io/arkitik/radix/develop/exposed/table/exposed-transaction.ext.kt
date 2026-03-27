@@ -1,9 +1,9 @@
 package io.arkitik.radix.develop.exposed.table
 
-import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.Transaction
-import org.jetbrains.exposed.sql.transactions.TransactionManager
-import org.jetbrains.exposed.sql.transactions.transaction
+import org.jetbrains.exposed.v1.core.Transaction
+import org.jetbrains.exposed.v1.jdbc.Database
+import org.jetbrains.exposed.v1.jdbc.transactions.TransactionManager
+import org.jetbrains.exposed.v1.jdbc.transactions.transaction
 
 /**
  * Executes the given [statement] inside a transaction.
