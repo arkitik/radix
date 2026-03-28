@@ -1,3 +1,10 @@
+## [3.0.1](https://github.com/arkitik/radix/compare/v3.0.0...v3.0.1) (2026-03-28)
+
+
+### Bug Fixes
+
+* Converts PrimaryKey property initializer to a getter [#48](https://github.com/arkitik/radix/issues/48) ([45a3d3b](https://github.com/arkitik/radix/commit/45a3d3b9de1717a8b42601128b69a86fb2c795ba))
+
 # [3.0.0](https://github.com/arkitik/radix/compare/v2.5.0...v3.0.0) (2026-03-27)
 
 

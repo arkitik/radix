@@ -8,7 +8,7 @@
     <artifactId>radix</artifactId>
     <name>radix</name>
     <packaging>pom</packaging>
-    <version>v3.0.0</version>
+    <version>v3.0.1</version>
 
     <modules>
         <module>radix-port</module>
