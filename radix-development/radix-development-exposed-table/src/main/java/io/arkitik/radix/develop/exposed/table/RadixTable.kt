@@ -22,7 +22,8 @@ abstract class RadixTable<ID, I>(
     val creationDate =
         datetime("creation_date").defaultExpression(CurrentDateTime)
 
-    override val primaryKey: PrimaryKey = PrimaryKey(uuid)
+    override val primaryKey: PrimaryKey
+        get() = PrimaryKey(uuid)
 
     open fun findIdentityByUuid(uuid: ID, database: Database? = null): I? =
         ensureInTransaction(database) {
