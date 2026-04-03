@@ -48,12 +48,12 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>21</java.version>
 
-        <dokka.version>2.0.0</dokka.version>
-        <kotlin.version>2.2.21</kotlin.version>
+        <dokka.version>2.2.0</dokka.version>
+        <kotlin.version>2.3.20</kotlin.version>
 
-        <spring-boot.version>4.0.4</spring-boot.version>
+        <spring-boot.version>4.0.5</spring-boot.version>
         <logbook.version>4.0.3</logbook.version>
-        <exposed.version>1.1.1</exposed.version>
+        <exposed.version>1.2.0</exposed.version>
 
     </properties>
     <dependencies>
@@ -71,6 +71,13 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-bom</artifactId>
+                <version>${kotlin.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
                 <version>${spring-boot.version}</version>
@@ -81,13 +88,6 @@
                 <groupId>org.jetbrains.exposed</groupId>
                 <artifactId>exposed-bom</artifactId>
                 <version>${exposed.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.jetbrains.kotlin</groupId>
-                <artifactId>kotlin-bom</artifactId>
-                <version>${kotlin.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
