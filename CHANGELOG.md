@@ -1,3 +1,10 @@
+## [3.0.2](https://github.com/arkitik/radix/compare/v3.0.1...v3.0.2) (2026-04-03)
+
+
+### Bug Fixes
+
+* Upgrade dokka to 2.2.0, kotlin to 2.3.20, spring-boot to 4.0.5, and exposed to 1.2.0 ([99ebc1e](https://github.com/arkitik/radix/commit/99ebc1e0a9c322d92197e0aabdd335c7a42cd27c))
+
 ## [3.0.1](https://github.com/arkitik/radix/compare/v3.0.0...v3.0.1) (2026-03-28)
 
 
