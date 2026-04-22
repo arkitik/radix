@@ -1,3 +1,10 @@
+# [3.1.0](https://github.com/arkitik/radix/compare/v3.0.2...v3.1.0) (2026-04-22)
+
+
+### Features
+
+* Add ExposedDatabaseConfigCustomizer interface to support customizing kotlin exposed database configuration [#51](https://github.com/arkitik/radix/issues/51) ([36b3211](https://github.com/arkitik/radix/commit/36b3211e8609c14a74411863e9c6173c8fbc73a3))
+
 ## [3.0.2](https://github.com/arkitik/radix/compare/v3.0.1...v3.0.2) (2026-04-03)
 
 
