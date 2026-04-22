@@ -1,5 +1,6 @@
 package io.arkitik.radix.starter.exposed
 
+import io.arkitik.radix.protocol.exposed.ExposedDatabaseConfigCustomizer
 import org.jetbrains.exposed.v1.core.DatabaseConfig
 import org.jetbrains.exposed.v1.jdbc.Database
 import org.jetbrains.exposed.v1.spring.boot4.autoconfigure.ExposedAutoConfiguration
@@ -23,9 +24,10 @@ import javax.sql.DataSource
 class RadixExposedStarter {
     @Bean
     @ConditionalOnMissingBean
-    fun databaseConfig() =
+    fun databaseConfig(exposedDatabaseConfigCustomizers: List<ExposedDatabaseConfigCustomizer>) =
         DatabaseConfig {
             useNestedTransactions = true
+            exposedDatabaseConfigCustomizers.forEach { it.customize(this) }
         }
 
     @Bean

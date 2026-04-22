@@ -22,6 +22,11 @@
             <artifactId>exposed-spring-boot4-starter</artifactId>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>${project.parent.groupId}</groupId>
+            <artifactId>radix-protocol-exposed</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
     </dependencies>
 
 </project>
