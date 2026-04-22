@@ -10,6 +10,7 @@
     </parent>
 
     <artifactId>radix-protocol</artifactId>
+    <name>radix-protocol</name>
     <packaging>pom</packaging>
     <modules>
         <module>radix-protocol-exposed</module>
