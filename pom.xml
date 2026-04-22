@@ -17,6 +17,7 @@
         <module>radix-dependencies</module>
         <module>radix-starter</module>
         <module>radix-audit</module>
+        <module>radix-protocol</module>
     </modules>
     <description>
         Shared business abstraction modules to develop any server project using kotlin
