@@ -10,6 +10,7 @@
     </parent>
 
     <artifactId>radix-protocol-exposed</artifactId>
+    <name>radix-protocol-exposed</name>
     <dependencies>
         <dependency>
             <groupId>org.jetbrains.exposed</groupId>
