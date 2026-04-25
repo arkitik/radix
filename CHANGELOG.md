@@ -1,3 +1,10 @@
+## [3.1.1](https://github.com/arkitik/radix/compare/v3.1.0...v3.1.1) (2026-04-25)
+
+
+### Bug Fixes
+
+* **deps:** Add missing dependency for radix-protocol-exposed in pom.xml ([31d2a39](https://github.com/arkitik/radix/commit/31d2a39a4d5f689996dcea2dead4756ee2ec0b7b))
+
 # [3.1.0](https://github.com/arkitik/radix/compare/v3.0.2...v3.1.0) (2026-04-22)
 
 
